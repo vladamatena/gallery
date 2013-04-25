@@ -1,0 +1,348 @@
+body
+{
+	background-color:#222222;
+	height:100%;
+	margin:0px;
+	margin-top:1em;
+}
+
+#main
+{  
+	position:absolute;
+	color:#FF8000;
+	background-color:#000000;
+	font-family:arial;
+	font-size:12px;
+
+	border-style:solid;
+	border-width:1px;
+	border-color:#FF8000;
+
+	width:86%;
+	left:7%;
+}
+
+
+@media only screen and (max-width: 800px)
+{
+	#main
+	{
+		width:100%;
+		left:0%;
+	}
+}
+
+
+#valid
+{
+	position:absolute;
+	right:0px;
+	margin:3px;
+}
+
+.mbutton
+{
+	display:inline-block;
+	text-decoration:none;
+	color:#FFE6BF;
+	background-color:#FF8000; 
+	font-weight:bold;
+	font-size:18px;
+	padding:0px 5px 0px 3px;
+	border-style:none solid none none;
+	border-width:1px;
+	border-color:black;
+}
+.mbutton:hover
+{
+	color:#000000;
+	background-color:#FFCC80;
+}
+.cmbutton
+{
+	background-color:black;
+	color:#FF8000;
+}
+
+#footer
+{
+	border-top-style:solid;
+	border-color:#FF8000;
+	border-width:1px;
+	
+	padding:2px 2px 0px 2px;
+}
+
+.download
+{
+	color:#99FF00;
+	background-color:green;
+	text-decoration:none;
+	font-size:20px;
+	padding:2px 5px 2px 3px;
+	border-color:#99FF00;
+	border-style:solid;
+	border-width:1px;
+}
+.download:hover
+{
+	color:black;
+	background-color:#99FF00;
+}
+
+
+img.cimage
+{
+	border-style:solid;
+	border-width:1px;
+	border-color:#FF8000;
+}
+img.cimage:hover
+{
+	border-color:#99FF00;
+}
+
+li
+{
+	font-size:12px;
+}
+.biglist
+{
+	font-size:15px;
+	margin-bottom: 1em;
+}
+
+.citem
+{
+	margin-left:1em;
+	vertical-align:50%;
+}
+
+.debug
+{
+	border-style:solid;
+	border-width:1px;
+	border-color:red;
+}
+
+img.gallery
+{
+	border-style:solid;
+	border-width:1px;
+	border-color:#FF8000;
+
+	width:12%;
+
+	margin:1%;
+}
+
+img.gallery:hover
+{
+	border-color:#99FF00;
+}
+
+
+.galleryframe
+{
+	margin: auto;
+}
+
+.image
+{
+	position:absolute;
+	float:left;
+	width:74%;
+	height:100%;
+	
+	
+	-webkit-background-size: contain;
+	-moz-background-size: contain;
+	-o-background-size: contain;
+	background-size: contain;
+}
+
+.viewcontent {
+	margin:5px;
+}
+
+.viewpanel
+{
+	float:right;
+	width:25%;
+	
+	color:grey;
+}
+
+.exif {
+	margin:1em;
+}
+
+div.controls {
+	position:relative;
+	margin:1em;
+}
+
+span.controls {
+	margin:5px;
+}
+
+/* RESTRICTED ACCESS */
+.restricted_background {
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;    
+}
+
+.restricted_content {
+	border-style:solid;
+	border-color:#FF8000;
+	border-width:5px;
+	
+	background-color:black;
+	
+	padding:2em;
+	
+	width:40em;
+	
+	margin: 10em auto;
+	
+	color:#FF8000;
+	text-align:center;
+}
+
+.restricted_content h1 {
+	font-size:2em;
+	font-weight:bold;
+	margin:0px;
+}
+
+.restricted_content p {
+	margin: 1em 0px 0.2em 0px;
+}
+
+.restricted_content input {
+	border-style:solid;
+	border-width:2px;
+	border-color:#FF8000;
+	
+	color:#FF8000;
+	background-color:lightgray;
+	text-align:center;
+	
+	width:30em;
+}
+
+/* Image directory listing */
+.logout {
+	border-style:solid;
+	border-color:#FF8000;
+	border-width:1px;
+	
+	margin-top:1em;
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:0px;
+	
+	border-bottom-width:0px;
+	padding:1px;
+}
+
+.listing {
+	border-style:solid;
+	border-color:#FF8000;
+	border-width:1px;
+	
+	color:#FF8000;
+	margin-top:0px;
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:1em;
+	
+	padding: 0.5em;
+}
+
+.listing a {
+	margin: 0.1em;
+	display:inline-block;
+}
+
+/* Image show */
+.image_show_back {
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	
+/*	border-color:blue;
+	border-style:solid;
+	border-width:5px;*/
+}
+
+.image_show_container {
+	border-style:solid;
+	border-color:#FF8000;
+	border-width:1px;
+	
+	height:90%;
+	padding:1px;
+	
+	margin-top:0px;
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:0em;
+}
+
+.image_show_image {
+	width:100%;
+	height:100%;
+}
+
+.lbutton {
+	float:right;
+}
+
+.previewlink
+{
+	color:#99FF00;
+	text-decoration:none;
+	font-size:8px;
+	padding:2px;
+	margin:0.5em !important;
+	border-color:#99FF00;
+	border-style:solid;
+	border-width:1px;
+	
+	width:128px;
+	height:128px;
+}
+.previewlink:hover
+{
+	color:black;
+	background-color:#99FF00;
+}
+
+/* Image show footer */
+.image_footer {
+	color:#FF8000;
+	font-size:9px;
+	
+	border-style:solid;
+	border-color:#FF8000;
+	border-width:1px;
+	
+	/*margin-top:1em;*/
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:0px;
+	
+	
+	border-top-width:0px;
+	padding:1px;
+}
+
+.gallery_year {
+	margin-bottom: 10px;
+}
