@@ -101,8 +101,9 @@
 	}
 	
 	function connect() {
-			mysql_pconnect("localhost", "gallery", "7mS0turA4ch78qLI7xqHKw") or die(my_error());
-			mysql_select_db("gallery") or die(my_error());
+		GLOBAL $gallery;
+		mysql_pconnect($gallery['sql_host'], $gallery['sql_user'], $gallery['sql_pass']) or die(my_error());
+		mysql_select_db($gallery['sql_db']) or die(my_error());
 	}
 	
 	function get_folders() {
