@@ -7,24 +7,24 @@
 	
 	function validate() {
 		GLOBAL $gallery;
-		
+				
 		// If not password protected return true
 		if(strlen($gallery['password']) == 0)
 			return true;
 		
-		connect();
+		$sql = connect();
 		
 		// get ticket from cookie
 		if(!isset($_COOKIE['ticket']))
 			return false;
-		$ticket = mysql_real_escape_string($_COOKIE['ticket']);
+		$ticket = $sql->escape_string($_COOKIE['ticket']);
 		
 		// validate ticket
-		$result=mysql_query("SELECT * FROM ticket WHERE ticket='$ticket'") or die(my_error());
-		if(mysql_num_rows($result) == 1)
+		$result = $sql->query("SELECT * FROM ticket WHERE ticket='$ticket'") or die(my_error());
+		if($result->num_rows == 1)
 		{
 			// update time
-			mysql_query("UPDATE ticket SET time=CURRENT_TIMESTAMP WHERE ticket='$ticket'") or die(my_error());
+			$sql->query("UPDATE ticket SET time=CURRENT_TIMESTAMP WHERE ticket='$ticket'") or die(my_error());
 			return true;
 		}
 		
@@ -36,35 +36,38 @@
 	}
 	
 	function genchallenge() {
+		$sql = connect();
+
 		// gen challenge data
-		$challenge = mysql_real_escape_string(rand());
+		$challenge = $sql->escape_string(rand());
 		$address = $_SERVER['REMOTE_ADDR'];
 		
 		// wipe old challenges for address
-		mysql_query("DELETE FROM challenge WHERE address='$address'");
+		$sql->query("DELETE FROM challenge WHERE address='$address'");
 		
 		// store challenge to database
-		mysql_query("INSERT INTO challenge ( challenge, address ) VALUES ( '$challenge', '$address' )");
+		$sql->query("INSERT INTO challenge ( challenge, address ) VALUES ( '$challenge', '$address' )");
 		
 		return $challenge;
 	}
 
 	function login($response) {
 		GLOBAL $gallery;
+
+		$sql = connect();
 		
-		connect();
 		$address = $_SERVER['REMOTE_ADDR'];
 		
 		// get salt from database
 		$salt = "";		
-		$result = mysql_query("SELECT challenge FROM challenge WHERE address='$address'");
-		if(($result) && (mysql_num_rows($result) > 0)) {
-			$challenge = mysql_fetch_assoc($result);
+		$result = $sql->query("SELECT challenge FROM challenge WHERE address='$address'");
+		if(($result) && ($result->num_rows > 0)) {
+			$challenge = $result->fetch_assoc();
 			$salt = $challenge['challenge'];
 		} else return false;
 		
 		// remove all challenges for address
-		mysql_query("DELETE FROM challenge WHERE address='$address'");
+		$sql->query("DELETE FROM challenge WHERE address='$address'");
 		
 		$plaintext = $salt . $gallery['password'];
 		$cyphertext = hash("sha512", $plaintext);
@@ -79,7 +82,7 @@
 			
 			
 			// add ticket to database and cookies
-			mysql_query("INSERT INTO ticket ( ticket, user, address ) VALUES ( '$ticket', '$user', '$address' )") or die(my_error());
+			$sql->query("INSERT INTO ticket ( ticket, user, address ) VALUES ( '$ticket', '$user', '$address' )") or die(my_error());
 			setcookie('ticket', $ticket, time()+60*60*24*365*10);
 			
 			return true;
@@ -92,18 +95,17 @@
 		if(!isset($_COOKIE['ticket'])) {
 			return;
 		} else {
-			connect();
+			$sql = connect();
 		
-			$ticket = mysql_real_escape_string($_COOKIE['ticket']);
+			$ticket = $sql->escape_string($_COOKIE['ticket']);
 			setcookie('ticket','');
-			mysql_query("DELETE FROM ticket WHERE ticket='$ticket'");
+			$sql->query("DELETE FROM ticket WHERE ticket='$ticket'");
 		}
 	}
 	
 	function connect() {
 		GLOBAL $gallery;
-		mysql_pconnect($gallery['sql_host'], $gallery['sql_user'], $gallery['sql_pass']) or die(my_error());
-		mysql_select_db($gallery['sql_db']) or die(my_error());
+		return new mysqli("p:" . $gallery['sql_host'], $gallery['sql_user'], $gallery['sql_pass'], $gallery['sql_db']);
 	}
 	
 	function get_folders() {
