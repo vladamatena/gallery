@@ -35,6 +35,7 @@
 .gallery .listing > .item.image > .name {
 	width: 128px;
 	display: inline-table;
+	word-break: break-word;
 }
 
 .gallery .listing > .item.image:hover {
