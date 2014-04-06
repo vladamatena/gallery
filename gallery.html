@@ -10,6 +10,13 @@
 				var gallery = Gallery($('#gallery-wrapper'), "api.php");
 			}
 		</script>
+		<script id="gallery_items" type="text/html">
+			{{#.}}
+			<div class="item">
+				<span>{{name}}<span>
+			</div>
+			{{/.}}
+		</script>
 	</head>
 	<body>
 		<div id="gallery-wrapper">Gallery content</div>

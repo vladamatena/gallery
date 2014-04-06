@@ -26,7 +26,8 @@ function Gallery(wrapper, api) {
 	};
 	
 	var renderDir = function(items) {
-		$wrapper.html(items);
+		var content = Mustache.render($('#gallery_items').html(), items);
+		$wrapper.html(content);
 	};
 	
 	// Initialize gallery
