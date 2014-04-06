@@ -33,7 +33,6 @@
 		// Get folder content
 		$path = $gallery['root'] . "/$folder";
 		$items = array();
-		$finfoMIME = finfo_open(FILEINFO_MIME_TYPE);
 		if($handle = opendir($path)) {
 			while(false !== ($entry = readdir($handle))) {
 				if($entry != "." && $entry != ".." && !preg_match('/^\..*/', $entry)) {
