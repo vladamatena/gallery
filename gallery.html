@@ -7,7 +7,7 @@
 		<script type="text/javascript" src="gallery.js"></script>
 		<script type="text/javascript">
 			document.ready = function() {
-				gallery.init($('#gallery-wrapper'));
+				var gallery = Gallery($('#gallery-wrapper'), "api.php");
 			}
 		</script>
 	</head>
