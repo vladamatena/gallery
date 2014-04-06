@@ -16,7 +16,7 @@ function Gallery(wrapper, api) {
 	var path = "."
 	
 	var gallerytemplate = '<div class="gallery"><div class="path"></div><div class="listing"></div></div>'
-	var itemListTemplate = '{{#.}}<div class="item {{type}}" data-name="{{name}}"><span class="name">{{name}}</span></div>{{/.}}';
+	var itemListTemplate = '{{#.}}<div class="item {{type}}" data-name="{{name}}">{{^isDir}}<div class="thumb"></div>{{/isDir}}<span class="name">{{name}}</span></div>{{/.}}';
 	var pathPartTemplate = '{{#.}}<span class="path-part" data-path="{{path}}">{{name}}</span>{{/.}}';
 		
 	/** Gallery initialization */
@@ -78,6 +78,11 @@ function Gallery(wrapper, api) {
 	}
 	
 	var renderDir = function(items) {
+		// Define methods on items
+		$(items).each(function() {
+			this.isDir = this.type=="directory";
+		});
+		
 		// Render elements
 		var content = Mustache.render(itemListTemplate, items);
 		$listing.html(content);

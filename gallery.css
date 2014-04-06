@@ -5,8 +5,8 @@
 	font-family: sans-serif;
 }
 
-/** LISTING **/
-.gallery .listing > .item {
+/** LISTING - DIRECTORY **/
+.gallery .listing > .item.directory {
 	margin: 2px;
 	border: 1px solid #99FF00;
 	color: #99FF00;
@@ -17,9 +17,38 @@
 	cursor: pointer;	
 }
 
-.gallery .listing > .item:hover {
+.gallery .listing > .item.directory:hover {
 	color: black;
 	background-color: #99FF00;
+}
+
+/** LISTING - IMAGE **/
+.gallery .listing > .item.image {
+	margin: 2px;
+	color: #ff8000;
+	display: inline-block;
+	cursor: pointer;
+	text-align: center;
+	font-size: 10px;
+}
+
+.gallery .listing > .item.image > .name {
+	width: 128px;
+	display: inline-table;
+}
+
+.gallery .listing > .item.image:hover {
+	color: #99ff00
+}
+
+.gallery .listing > .item.image > .thumb {
+	width: 128px;
+	height: 128px;
+	border: 1px solid #ff8000;
+}
+
+.gallery .listing > .item.image:hover > .thumb {
+	border: 1px solid #99ff00;
 }
 
 /** PATH **/
