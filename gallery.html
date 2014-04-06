@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<link href="gallery.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="lib/jquery-2.1.0.min.js"></script>
 		<script type="text/javascript" src="lib/mustache.js"></script>
 		<script type="text/javascript" src="gallery.js"></script>
@@ -9,13 +10,6 @@
 			document.ready = function() {
 				var gallery = Gallery($('#gallery-wrapper'), "api.php");
 			}
-		</script>
-		<script id="gallery_items" type="text/html">
-			{{#.}}
-			<div class="item">
-				<span>{{name}}<span>
-			</div>
-			{{/.}}
 		</script>
 	</head>
 	<body>

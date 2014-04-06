@@ -1,0 +1,45 @@
+.gallery {
+	background-color: black;
+	border: 1px solid #FF8000;
+	color: #FF8000;
+	font-family: sans-serif;
+}
+
+/** LISTING **/
+.gallery .listing > .item {
+	margin: 2px;
+	border: 1px solid #99FF00;
+	color: #99FF00;
+	background-color: green;
+	display: inline-block;
+	font-size: 20px;
+	padding: 2px 5px 2px 3px;
+	cursor: pointer;	
+}
+
+.gallery .listing > .item:hover {
+	color: black;
+	background-color: #99FF00;
+}
+
+/** PATH **/
+.gallery .path {
+	border-bottom: 1px solid #ff8000;
+}
+
+.gallery .path > .path-part {
+	font-weight: bold;
+	cursor: pointer;
+	padding: 2px;
+	display: inline-block;
+	border: 1px solid black;
+}
+
+.gallery .path > .path-part:hover {
+	color: #000000;
+	background-color: #FFCC80;
+}
+
+.gallery .path > .path-part:not(:first-child):before {
+	content: ">";
+}
