@@ -13,10 +13,13 @@ function Gallery(wrapper, api) {
 	/// Gallery API URL
 	var api = api;
 	/// Path to current directory
-	var path = "."
+	var path = null;
 	
 	var gallerytemplate = '<div class="gallery"><div class="path"></div><div class="listing"></div></div>'
-	var itemListTemplate = '{{#.}}<div class="item {{type}}" data-name="{{name}}">{{^isDir}}<div class="thumb"></div>{{/isDir}}<span class="name">{{name}}</span></div>{{/.}}';
+	var itemDirectoryTemplate = '{{#.}}<div class="item {{type}}" data-name="{{name}}"><span class="name">{{name}}</span></div>{{/.}}';
+	var itemImageTemplate = '{{#.}}<div class="item {{type}}" data-name="{{name}}"><div class="thumb"></div><span class="name">{{name}}</span></div>{{/.}}';
+	var itemCategorizedListTemplate = '<div class="category">{{category}}</div>{{#dirs}}<div class="item {{type}}" data-name="{{name}}"><span class="name">{{name}}</span></div>{{/dirs}}';
+	var itemListingBreakTemplate = '<div class="listing-break"></div>';
 	var pathPartTemplate = '{{#.}}<span class="path-part" data-path="{{path}}">{{name}}</span>{{/.}}';
 		
 	/** Gallery initialization */
@@ -38,7 +41,6 @@ function Gallery(wrapper, api) {
 	cd = function(path) {
 		// Set path
 		self.path = path;
-		console.log(path);
 		renderPath(path);
 		
 		// Load listing
@@ -46,7 +48,7 @@ function Gallery(wrapper, api) {
 			url: api,
 			data: { fn: 'ls', folder: path }
 		}).done(function(items) {
-			renderDir(items);
+			renderDir(items, path=='.');
 		});
 	};
 	
@@ -64,7 +66,6 @@ function Gallery(wrapper, api) {
 				name = "Gallery";
 			partObjs.push({name: name, path: path});
 		});
-		console.log(partObjs);
 		
 		// Render path content
 		var content = Mustache.render(pathPartTemplate, partObjs);
@@ -77,14 +78,69 @@ function Gallery(wrapper, api) {
 		});
 	}
 	
-	var renderDir = function(items) {
-		// Define methods on items
-		$(items).each(function() {
-			this.isDir = this.type=="directory";
+	/** Sort items, directories first
+	 * 
+	 * @param items Items to sort
+	 * @return Sorted items
+	 */
+	var sortItems = function(items) {
+		return items.sort(function(a, b) {
+			return a.name.localeCompare(b.name);
+		});
+	}
+	
+	var renderDirFlat = function(dirs) {
+		dirs = sortItems(dirs);
+		return Mustache.render(itemDirectoryTemplate, dirs);
+	}
+	
+	var renderDirCategorized = function(dirs) {
+		dirs = sortItems(dirs);
+		var categ = {};
+		$(dirs).each(function() {
+			var test = this.name.match(/19[0-9][0-9]|2[0-9][0-9][0-9]/);
+			cat = "Other";
+			if(test)
+				cat = test[0];
+			if(typeof categ[cat] == "undefined")
+				categ[cat] = [];
+			categ[cat].push(this);
 		});
 		
+		var ret = "";
+		
+		for(cat in categ)
+			ret += Mustache.render(itemCategorizedListTemplate, {category: cat, dirs: categ[cat]});
+		
+		return ret;
+	}
+	
+	var renderImages = function(images) {
+		images = sortItems(images);
+		return Mustache.render(itemImageTemplate, images);
+	}
+	
+	var renderDir = function(items, categorize) {
 		// Render elements
-		var content = Mustache.render(itemListTemplate, items);
+		var content = "";
+		
+		// Split items by type
+		var images = [];
+		var dirs = [];
+		$(items).each(function() {
+			if(this.type == "directory")
+				dirs.push(this);
+			else
+				images.push(this);
+		});
+		
+		// Render content
+		if(categorize == true)
+			content += renderDirCategorized(dirs);
+		else
+			content += renderDirFlat(dirs);
+		content += itemListingBreakTemplate;
+		content += renderImages(images);
 		$listing.html(content);
 		
 		// Register directory click events

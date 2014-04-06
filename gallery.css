@@ -5,6 +5,11 @@
 	font-family: sans-serif;
 }
 
+/** LISTING **/
+.gallery .listing {
+	margin: 5px;
+}
+
 /** LISTING - DIRECTORY **/
 .gallery .listing > .item.directory {
 	margin: 2px;
@@ -20,6 +25,10 @@
 .gallery .listing > .item.directory:hover {
 	color: black;
 	background-color: #99FF00;
+}
+
+.gallery .listing .category {
+	margin-top: 5px;
 }
 
 /** LISTING - IMAGE **/
