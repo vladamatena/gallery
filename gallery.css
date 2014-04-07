@@ -55,7 +55,8 @@
 	width: 128px;
 	height: 128px;
 	border: 1px solid #ff8000;
-	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 .gallery .listing > .item.image:hover > .thumb {

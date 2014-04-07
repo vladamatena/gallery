@@ -54,7 +54,6 @@ function Gallery(wrapper, api) {
 	
 	var renderPath = function(path) {
 		// Get path parts
-		console.log("path:\"" + path + "\"");
 		parts = path==""?path.split('/'):[""].concat(path.split('/'));
 		var path = "";
 		var partObjs = [];
