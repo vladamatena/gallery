@@ -107,13 +107,21 @@
 .gallery .viewer .nav {
 	position: absolute;
 	top: 50%;
-	left: 0.5em;
-	right: 0.5em;
+	
+	
 	
 	font-size: 70px;
 	font-weight: bold;
 	line-height: 36px;
 	font-family: fantasy;
+}
+
+.gallery .viewer .prev .nav {
+	left: 0.5em;
+}
+
+.gallery .viewer .next .nav {
+	right: 0.5em;
 }
 
 .gallery .viewer .prev {
