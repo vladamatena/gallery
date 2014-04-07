@@ -119,6 +119,14 @@ function Gallery(wrapper, api) {
 					break;
 			}
 		});
+		$(document).on("webkitfullscreenchange", function() {
+			if(!document.webkitIsFullScreen)
+				closeViewer();
+		});
+		$(document).on("mozfullscreenchange", function() {
+			if(!document.mozIsFullScreen)
+				closeViewer();
+		});
 		
 		// Prevent unwanted actions
 		$viewer.dblclick(function(event) {
