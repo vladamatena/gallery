@@ -84,3 +84,70 @@
 .gallery .path > .path-part:not(:first-child):before {
 	content: ">";
 }
+
+/** VIEWER **/
+.gallery .viewer {
+	border: 1px solid red;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background-color: black;
+	background-image: url('http://mattty.cz/gallery_devel/api.php?fn=web&img=JUGOSLAVIE%201986%20-%20Plitvick%C3%A1%20jezera/03%20Jugosl%C3%A1vie%201986.jpg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.gallery .viewer .prev {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 25%;
+	border: 1px solid red;
+	text-align: center;
+}
+
+.gallery .viewer .prev:hover {
+	color: red;
+}
+
+.gallery .viewer .next {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 25%;
+	border: 1px solid red;
+	text-align: center;
+}
+
+.gallery .viewer .next:hover {
+	color: red;
+}
+
+.gallery .viewer .menu {
+	position: absolute;
+	min-height: 15%;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	border: 1px solid blue;
+	text-align: center;
+}
+
+.gallery .viewer .menu .info {
+	display: inline-block;
+	float: left;
+}
+
+.gallery .viewer .menu .name {
+	display: inline-block;
+}
+
+.gallery .viewer .menu .exit {
+	display: inline-block;
+	float: right;
+}
