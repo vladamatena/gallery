@@ -10,6 +10,15 @@
 		case "ls":
 			ls($_GET['folder']);
 			break;
+		case "thumb":
+			get("small", $_GET['img']);
+			break;
+		case "web":
+			get("web", $_GET['img']);
+			break;
+		case "img":
+			get("src", $_GET['img']);
+			break;
 		default:
 			apiError("Bad command: " . $_GET['fn']);
 	}
@@ -53,5 +62,22 @@
 		
 		header('Content-type: application/json');
 		echo(json_encode($items));
+	}
+	
+	function get($size, $image) {
+		GLOBAL $gallery;
+		
+		$src = $gallery['root'] . "/" . $image;
+		
+		
+		$img = $src;
+		
+		
+		header("Content-type: image/jpg");
+		header("Content-Transfer-Encoding: binary");
+		date_default_timezone_set('UTC');
+		header("Last-Modified: " . date('r', filemtime($img)));
+		
+		readfile($img);
 	}
 ?>
