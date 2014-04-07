@@ -39,12 +39,8 @@ function Gallery(wrapper, api) {
 				</div>\
 				<div class="menu">\
 					<div class="inner" style="display: none;">\
-						<div class="info">\
-							Info #0</br>\
-							Info #1</br>\
-							Info #2</br>\
-						</div>\
-						<div class="name">NAME</div>\
+						<div class="info"></div>\
+						<div class="name"></div>\
 						<div class="exit">x</div>\
 					</div>\
 				</div>\

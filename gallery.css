@@ -159,25 +159,19 @@
 }
 
 .gallery .viewer .menu .info {
-	display: inline-block;
-	float: left;
-	margin-left: 4px;
+	position: absolute;
+	left: 4px;
 	text-align: left;
 }
 
-.gallery .viewer .menu .name {
-	display: inline-block;
-}
-
 .gallery .viewer .menu .exit {
-	display: inline-block;
-	float: right;
+	position: absolute;
+	right: 5px;
+	top: 5px;
 	font-size: 70px;
 	font-family: monospace;
 	font-weight: bold;
 	line-height: 36px;
-	margin-right: 1px;
-	margin-top: 0.6px;
 }
 
 .gallery .viewer .menu .exit:hover {
