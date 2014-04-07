@@ -25,12 +25,26 @@ function Gallery(wrapper, api) {
 			<div class="path"></div>\
 			<div class="listing"></div>\
 			<div class="viewer">\
-				<div class="prev">Prev</div>\
-				<div class="next">Next</div>\
+				<div class="prev">\
+					<div class="inner" style="display: none;">\
+						<span class="nav"><</span>\
+					</div>\
+				</div>\
+				<div class="next">\
+					<div class="inner" style="display: none;">\
+						<span class="nav">></span>\
+					</div>\
+				</div>\
 				<div class="menu">\
-					<div class="info">Informations</div>\
-					<div class="name">NAME</div>\
-					<div class="exit">Exit</div>\
+					<div class="inner" style="display: none;">\
+						<div class="info">\
+							Info #0</br>\
+							Info #1</br>\
+							Info #2</br>\
+						</div>\
+						<div class="name">NAME</div>\
+						<div class="exit">x</div>\
+					</div>\
 				</div>\
 			</div>\
 		</div>'
@@ -54,7 +68,8 @@ function Gallery(wrapper, api) {
 				<span class="name">{{name}}</span>\
 			</div>\
 		{{/dirs}}';
-	var itemListingBreakTemplate = '<div class="listing-break"></div>';
+	var itemListingBreakTemplate = '\
+		<div class="listing-break"></div>';
 	var pathPartTemplate = '\
 		{{#.}}\
 			<span class="path-part" data-path="{{path}}">{{name}}</span>\
@@ -70,6 +85,12 @@ function Gallery(wrapper, api) {
 		$listing = $gallery.find('.listing');
 		$path = $gallery.find('.path');
 		$viewer = $gallery.find('.viewer');
+		
+		// Show viewer controls on hover
+		$('.prev, .next, .menu', $viewer).hover(
+			function () { $('.inner', this).fadeIn(50); },
+			function () { $('.inner', this).fadeOut(); }
+		);
 		
 		// Render root directory
 		cd("");

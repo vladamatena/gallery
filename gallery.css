@@ -87,7 +87,6 @@
 
 /** VIEWER **/
 .gallery .viewer {
-	border: 1px solid red;
 	position: fixed;
 	top: 0px;
 	left: 0px;
@@ -100,18 +99,35 @@
 	background-size: contain;
 }
 
+.gallery .viewer .nav:hover {
+	color: #99FF00;
+	text-shadow: 0px 0px 18px #99FF00;
+}
+
+.gallery .viewer .nav {
+	position: absolute;
+	top: 50%;
+	left: 0.5em;
+	right: 0.5em;
+	
+	font-size: 70px;
+	font-weight: bold;
+	line-height: 36px;
+	font-family: fantasy;
+}
+
 .gallery .viewer .prev {
 	position: absolute;
 	left: 0px;
 	top: 0px;
 	bottom: 0px;
 	width: 25%;
-	border: 1px solid red;
-	text-align: center;
-}
 
-.gallery .viewer .prev:hover {
-	color: red;
+	text-align: left;
+	
+	
+	display: block;
+	margin-top: -0.5em;
 }
 
 .gallery .viewer .next {
@@ -120,12 +136,11 @@
 	top: 0px;
 	bottom: 0px;
 	width: 25%;
-	border: 1px solid red;
-	text-align: center;
-}
-
-.gallery .viewer .next:hover {
-	color: red;
+	
+	text-align: right;
+	
+	display: block;
+	margin-top: -0.5em;
 }
 
 .gallery .viewer .menu {
@@ -134,13 +149,15 @@
 	top: 0px;
 	left: 0px;
 	right: 0px;
-	border: 1px solid blue;
 	text-align: center;
+	font-weight: bold;
+	text-shadow:0px 0px 5px black, 2px 0px 5px black, 2px 2px 5px black, 0px 2px 5px black, -2px 0px 5px black, 0px -2px 5px black, -2px -2px 5px black, 0px 0px 5px black, 4px 0px 5px black, 4px 4px 5px black, 0px 4px 5px black, -4px 0px 5px black, 0px -4px 5px black, -4px -4px 5px black;
 }
 
 .gallery .viewer .menu .info {
 	display: inline-block;
 	float: left;
+	margin-left: 4px;
 }
 
 .gallery .viewer .menu .name {
@@ -150,4 +167,15 @@
 .gallery .viewer .menu .exit {
 	display: inline-block;
 	float: right;
+	font-size: 70px;
+	font-family: monospace;
+	font-weight: bold;
+	line-height: 36px;
+	margin-right: 1px;
+	margin-top: 0.6px;
+}
+
+.gallery .viewer .menu .exit:hover {
+	color: #99FF00;
+	text-shadow: 0px 0px 18px #99FF00;
 }
