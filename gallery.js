@@ -17,14 +17,16 @@ function Gallery(wrapper, api) {
 	var path = null;
 	/// Current directory content
 	var items = null;
-	/// Current open image index relative to items
+	/// Current directory images
+	var images = null;
+	/// Current open image index relative to images
 	var currentImage = null;
 	
 	var gallerytemplate = '\
 		<div class="gallery">\
 			<div class="path"></div>\
 			<div class="listing"></div>\
-			<div class="viewer">\
+			<div class="viewer" style="display:none;">\
 				<div class="prev">\
 					<div class="inner" style="display: none;">\
 						<span class="nav"><</span>\
@@ -91,6 +93,11 @@ function Gallery(wrapper, api) {
 			function () { $('.inner', this).fadeIn(50); },
 			function () { $('.inner', this).fadeOut(); }
 		);
+		
+		// Bind viewer actions
+		$('.exit', $viewer).click(closeViewer);
+		$('.prev', $viewer).click(prevImg);
+		$('.next', $viewer).click(nextImg);
 		
 		// Render root directory
 		cd("");
@@ -195,13 +202,13 @@ function Gallery(wrapper, api) {
 		var content = "";
 		
 		// Split items by type
-		var images = [];
+		self.images = [];
 		var dirs = [];
 		$(items).each(function() {
 			if(this.type == "directory")
 				dirs.push(this);
 			else
-				images.push(this);
+				self.images.push(this);
 		});
 		
 		// Render content
@@ -210,7 +217,7 @@ function Gallery(wrapper, api) {
 		else
 			content += renderDirFlat(dirs);
 		content += itemListingBreakTemplate;
-		content += renderImages(images);
+		content += renderImages(self.images);
 		$listing.html(content);
 		
 		// Register directory click events
@@ -227,17 +234,60 @@ function Gallery(wrapper, api) {
 			var name = $(this).data('name');
 			// Find index for name
 			var index = 0;
-			$(self.items).each(function(i) {
+			$(self.images).each(function(i) {
 				if(this.name == name)
 					index = i;
 			});
-			displayImage(index);
+			openViewer(index);
 		});
 	};
 	
-	var displayImage = function(index) {
-		alert(index);
+	var openViewer = function(index) {
+		// Show viewer and hide gallery
+		$viewer.show();
+		$listing.hide();
 		
+		displayImage(index);
+	}
+	
+	var closeViewer = function() {
+		// Hide viewer show listing
+		$listing.show();
+		$viewer.hide();
+	}
+	
+	var getNext = function(index) {
+		if(index + 1 < self.images.length)
+			return index + 1;
+		else
+			return 0;
+	}
+	
+	var getPrev = function(index) {
+		if(index - 1 >= 0)
+			return index - 1;
+		else
+			return self.images.length - 1;
+	}
+	
+	var nextImg = function() {
+		displayImage(getNext(self.currentImage));
+		preloadImage(getNext(self.currentImage));
+	}
+	
+	var prevImg = function() {
+		displayImage(getPrev(self.currentImage));
+		preloadImage(getPrev(self.currentImage));
+	}
+	
+	var displayImage = function(index) {
+		self.currentImage = index;
+		$viewer.css("background-image", 'url(\'' + self.images[index].web + '\')');
+	}
+	
+	var preloadImage = function(index) {
+		var img = new Image();
+		img.src = self.images[index].web;
 	}
 	
 	// Initialize gallery
