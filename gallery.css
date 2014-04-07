@@ -3,6 +3,10 @@
 	border: 1px solid #FF8000;
 	color: #FF8000;
 	font-family: sans-serif;
+	
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
 }
 
 /** LISTING **/

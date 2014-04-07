@@ -103,6 +103,28 @@ function Gallery(wrapper, api) {
 		$('.exit', $viewer).click(closeViewer);
 		$('.prev', $viewer).click(prevImg);
 		$('.next', $viewer).click(nextImg);
+		$('body').keydown(function(event) {
+			switch(event.which) {
+				case 27:
+					event.preventDefault();
+					closeViewer();
+					break;
+				case 39:
+					event.preventDefault();
+					nextImg();
+					break;
+				case 37:
+					event.preventDefault();
+					prevImg();
+					break;
+			}
+		});
+		
+		// Prevent unwanted actions
+		$viewer.dblclick(function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+		});
 		
 		// Render root directory
 		cd("");
