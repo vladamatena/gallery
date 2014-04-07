@@ -19,6 +19,9 @@
 		case "img":
 			get("src", $_GET['img']);
 			break;
+		case "info":
+			info($_GET['img']);
+			break;
 		default:
 			apiError("Bad command: " . $_GET['fn']);
 	}
@@ -131,5 +134,27 @@
 		header("Last-Modified: " . date('r', filemtime($img)));
 		
 		readfile($img);
+	}
+		
+	function info($image) {
+		GLOBAL $gallery;
+		
+		$src = $gallery['root'] . "/" . $image;
+		
+		// Grather image informations
+		$exif = exif_read_data($src, 'EXIF');
+		$info = array();
+		
+		$info['date'] = $exif['DateTimeOriginal'];
+		$info['dimensions'] = $exif['ExifImageWidth'] . "x" . $exif['ExifImageLength'];
+		$info['size'] = formatBytes(filesize($src));
+		$info['model'] = $exif['Make'] . "(" . $exif['Model'] . ")";
+		$info['exposure'] = $exif['ExposureTime'];
+		$info['fnumber'] = $exif['FNumber'];
+		$info['iso'] = $exif['ISOSpeedRatings'];
+		$info['description'] = $exif['ImageDescription'];
+		
+		header('Content-type: application/json');
+		echo(json_encode($info));
 	}
 ?>

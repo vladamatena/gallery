@@ -76,6 +76,15 @@ function Gallery(wrapper, api) {
 		{{#.}}\
 			<span class="path-part" data-path="{{path}}">{{name}}</span>\
 		{{/.}}';
+	var imageInfoTemplate = '\
+		<table class="info-table">\
+			{{#.}}\
+				<tr>\
+					<td class="name">{{name}}</td>\
+					<td class="value">{{value}}</td>\
+				</tr>\
+			{{/.}}\
+		</table>';
 		
 	/** Gallery initialization */
 	init = function() {
@@ -282,7 +291,26 @@ function Gallery(wrapper, api) {
 	
 	var displayImage = function(index) {
 		self.currentImage = index;
+		
+		// Set image
 		$viewer.css("background-image", 'url(\'' + self.images[index].web + '\')');
+		
+		// Set image name
+		$('.name', $viewer).text(self.images[index].name);
+		
+		// Load image info
+		$.ajax({
+			url: api,
+			data: { fn: 'info', img: self.path + "/" + self.images[index].name }
+		}).done(function(info) {
+			var data = [];
+			for(key in info)
+				data.push({name: key, value: info[key]});
+			
+			$('.info', $viewer).html(Mustache.render(imageInfoTemplate, data));
+		});
+		
+		
 	}
 	
 	var preloadImage = function(index) {
