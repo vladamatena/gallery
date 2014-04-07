@@ -29,7 +29,7 @@
 	}
 	
 	function isFileImage($name) {
-		return preg_match('/\.[jJ][pP][gG]$/', $name);
+		return preg_match('/\.[jJ][pP][eE]?[gG]$/', $name);
 	}
 	
 	function ls($folder) {
