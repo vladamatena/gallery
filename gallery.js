@@ -17,7 +17,7 @@ function Gallery(wrapper, api) {
 	
 	var gallerytemplate = '<div class="gallery"><div class="path"></div><div class="listing"></div></div>'
 	var itemDirectoryTemplate = '{{#.}}<div class="item {{type}}" data-name="{{name}}"><span class="name">{{name}}</span></div>{{/.}}';
-	var itemImageTemplate = '{{#.}}<div class="item {{type}}" data-name="{{name}}"><div class="thumb"></div><span class="name">{{name}}</span></div>{{/.}}';
+	var itemImageTemplate = '{{#.}}<div class="item {{type}}" data-name="{{name}}"><div class="thumb" style="background-image: url(\'{{src}}\');"></div><span class="name">{{name}}</span></div>{{/.}}';
 	var itemCategorizedListTemplate = '<div class="category">{{category}}</div>{{#dirs}}<div class="item {{type}}" data-name="{{name}}"><span class="name">{{name}}</span></div>{{/dirs}}';
 	var itemListingBreakTemplate = '<div class="listing-break"></div>';
 	var pathPartTemplate = '{{#.}}<span class="path-part" data-path="{{path}}">{{name}}</span>{{/.}}';
@@ -34,7 +34,7 @@ function Gallery(wrapper, api) {
 		$path = $gallery.find('.path');
 		
 		// Render root directory
-		cd(".");
+		cd("");
 	};
 	
 	/** Change directory */
@@ -48,21 +48,22 @@ function Gallery(wrapper, api) {
 			url: api,
 			data: { fn: 'ls', folder: path }
 		}).done(function(items) {
-			renderDir(items, path=='.');
+			renderDir(items, path=='');
 		});
 	};
 	
 	var renderPath = function(path) {
 		// Get path parts
-		parts = path.split('/');
+		console.log("path:\"" + path + "\"");
+		parts = path==""?path.split('/'):[""].concat(path.split('/'));
 		var path = "";
 		var partObjs = [];
 		$(parts).each(function() {
-			if(path != '')
+			if(path != "")
 				path += "/";
 			path += this;
 			var name = this;
-			if(name == '.')
+			if(name == '')
 				name = "Gallery";
 			partObjs.push({name: name, path: path});
 		});
@@ -121,6 +122,11 @@ function Gallery(wrapper, api) {
 	}
 	
 	var renderDir = function(items, categorize) {
+		// Add data to items
+		$(items).each(function() {
+			this.src = api + "?fn=thumb&img=" + self.path + "/" + this.name;
+		});
+		
 		// Render elements
 		var content = "";
 		
@@ -146,7 +152,10 @@ function Gallery(wrapper, api) {
 		// Register directory click events
 		$('.item.directory', $listing).click(function() {
 			var name = $(this).data('name');
-			cd(self.path + "/" + name);
+			if(self.path == "")
+				cd(name);
+			else
+				cd(self.path + "/" + name);
 		});
 	};
 	
