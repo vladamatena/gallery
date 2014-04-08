@@ -1,7 +1,7 @@
 <?php
 	include "config.php";
 	include "functions.php";
-	
+		
 	// Check user is logged in
 	validate() or exit();
 
@@ -169,7 +169,7 @@
 		if (ob_get_level() == 0)
 			ob_start();
 		
-	//	header('Content-Type: text/plain; charset=utf-8');
+		header('Content-Type: text/html; charset=utf-8');
 		echo "Generating scaled images...</br>";
 		
 		function updateDir($path) {
@@ -179,7 +179,7 @@
 			echo str_pad('',4096)."\n";
 			ob_flush();
 			flush();
-		
+			
 			foreach($items as $item) {
 				if($item['type'] == "directory") {
 					if($path == "")
@@ -188,7 +188,7 @@
 						updateDir($path . "/" . $item['name']);
 				} else {
 					echo "Processing file: " . $path . "/" . $item['name'] . "...";
-					echo str_pad('',4096)."\n";    
+					echo str_pad('',4096)."\n";
 					ob_flush();
 					flush();
 					
@@ -196,7 +196,7 @@
 					api_makeWeb($path . "/" . $item['name']);
 					
 					echo "done</br>";
-					echo str_pad('',4096)."\n";    
+					echo str_pad('',4096)."\n";
 					ob_flush();
 					flush();
 				}
