@@ -22,6 +22,9 @@
 		case "info":
 			info($_GET['img']);
 			break;
+		case "update":
+			update();
+			break;
 		default:
 			apiError("Bad command: " . $_GET['fn']);
 	}
@@ -35,7 +38,7 @@
 		return preg_match('/\.[jJ][pP][eE]?[gG]$/', $name);
 	}
 	
-	function ls($folder) {
+	function listFolder($folder) {
 		GLOBAL $gallery;
 		
 		// Check for ".." in folder name
@@ -63,15 +66,19 @@
 			closedir($handle);
 		}
 		
+		return $items;
+	}
+	
+	function ls($folder) {
 		header('Content-type: application/json');
-		echo(json_encode($items));
+		echo(json_encode(listFolder($folder)));
 	}
 	
 	function api_makeSmall($image) {
 		GLOBAL $gallery;
 		$src = $gallery['root'] . "/" . $image;
-		$hash = hash("sha1", $src);
-		$hashDir = $gallery['preview'] . "/" . substr($hash, 0, 2);
+		$hash = hash("sha1", "small/" . $image);
+		$hashDir = $gallery['scaled'] . "/" . substr($hash, 0, 2);
 		
 		// Ensure hashdir
 		if(!is_dir($hashDir))
@@ -91,8 +98,8 @@
 	function api_makeWeb($image) {
 		GLOBAL $gallery;
 		$src = $gallery['root'] . "/" . $image;
-		$hash = hash("sha1", $src);
-		$hashDir = $gallery['webquality'] . "/" . substr($hash, 0, 2);
+		$hash = hash("sha1", "web/" . $image);
+		$hashDir = $gallery['scaled'] . "/" . substr($hash, 0, 2);
 		
 		// Ensure hashdir
 		if(!is_dir($hashDir))
@@ -156,5 +163,48 @@
 		
 		header('Content-type: application/json');
 		echo(json_encode($info));
+	}
+	
+	function update() {
+		if (ob_get_level() == 0)
+			ob_start();
+		
+	//	header('Content-Type: text/plain; charset=utf-8');
+		echo "Generating scaled images...</br>";
+		
+		function updateDir($path) {
+			$items = listFolder($path);
+			
+			echo "Processing directory: $path</br>";
+			echo str_pad('',4096)."\n";
+			ob_flush();
+			flush();
+		
+			foreach($items as $item) {
+				if($item['type'] == "directory") {
+					if($path == "")
+						updateDir($item['name']);
+					else
+						updateDir($path . "/" . $item['name']);
+				} else {
+					echo "Processing file: " . $path . "/" . $item['name'] . "...";
+					echo str_pad('',4096)."\n";    
+					ob_flush();
+					flush();
+					
+					api_makeSmall($path . "/" . $item['name']);
+					api_makeWeb($path . "/" . $item['name']);
+					
+					echo "done</br>";
+					echo str_pad('',4096)."\n";    
+					ob_flush();
+					flush();
+				}
+			}
+		}
+		
+		updateDir("");
+		
+		ob_end_flush();
 	}
 ?>

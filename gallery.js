@@ -292,6 +292,7 @@ function Gallery(wrapper, api) {
 		}
 		
 		displayImage(index);
+		preloadImage(getNext(index));
 	}
 	
 	var closeViewer = function() {
@@ -306,7 +307,7 @@ function Gallery(wrapper, api) {
 			document.mozCancelFullScreen();  
 		} else if (document.webkitCancelFullScreen) {  
 			document.webkitCancelFullScreen();  
-		}  
+		}
 	}
 	
 	var getNext = function(index) {
@@ -343,6 +344,7 @@ function Gallery(wrapper, api) {
 		$('.name', $viewer).text(self.images[index].name);
 		
 		// Load image info
+		$('.info', $viewer).empty();
 		$.ajax({
 			url: api,
 			data: { fn: 'info', img: self.path + "/" + self.images[index].name }
@@ -353,8 +355,6 @@ function Gallery(wrapper, api) {
 			
 			$('.info', $viewer).html(Mustache.render(imageInfoTemplate, data));
 		});
-		
-		
 	}
 	
 	var preloadImage = function(index) {
