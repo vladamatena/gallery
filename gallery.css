@@ -182,3 +182,29 @@
 	color: #99FF00;
 	text-shadow: 0px 0px 18px #99FF00;
 }
+
+/** LOGIN **/
+.gallery .login {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #222222;
+}
+
+.gallery .login .restricted {
+	border: 3px solid #ff8000;
+	padding: 2em;
+	width: 40em;
+	margin: 10em auto;
+	text-align: center;
+	background-color: black
+}
+
+.gallery .login .restricted input {
+	width: 30em;
+	border: 2px solid #ff8000;
+	text-align: center;
+	color: #ff8000;
+}

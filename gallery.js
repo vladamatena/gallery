@@ -10,6 +10,7 @@ function Gallery(wrapper, api) {
 	var $path = null;
 	var $listing = null;
 	var $viewer = null;
+	var $login = null;
 	
 	/// Gallery API URL
 	var api = api;
@@ -24,8 +25,8 @@ function Gallery(wrapper, api) {
 	
 	var gallerytemplate = '\
 		<div class="gallery">\
-			<div class="path"></div>\
-			<div class="listing"></div>\
+			<div class="path">Loading...</div>\
+			<div class="listing">Loading...</div>\
 			<div class="viewer" style="display:none;">\
 				<div class="prev">\
 					<div class="inner" style="display: none;">\
@@ -43,6 +44,15 @@ function Gallery(wrapper, api) {
 						<div class="name"></div>\
 						<div class="exit">x</div>\
 					</div>\
+				</div>\
+			</div>\
+			<div class="login" style="display: none;">\
+				<div class="restricted">\
+					<h1>RESTRICTED ACCESS</h1>\
+					<p class="enter-pass">enter passphrase</p>\
+					<form>\
+					<p><input type="password" name="passphrase"/></p>\
+					</form>\
 				</div>\
 			</div>\
 		</div>'
@@ -92,6 +102,7 @@ function Gallery(wrapper, api) {
 		$listing = $gallery.find('.listing');
 		$path = $gallery.find('.path');
 		$viewer = $gallery.find('.viewer');
+		$login = $gallery.find('.login');
 		
 		// Show viewer controls on hover
 		$('.prev, .next, .menu', $viewer).hover(
@@ -134,9 +145,45 @@ function Gallery(wrapper, api) {
 			event.stopPropagation();
 		});
 		
-		// Render root directory
-		cd("");
+		// Login action
+		$('form', $login).submit(function(event) {
+			event.preventDefault();
+			
+			var passphrase = $('input', $login).val();
+			
+			// Get challange
+			$.ajax({
+				url: api,
+				data: { fn: "login-challenge" }
+			}).done(function(challenge) {
+				// Respond to challenge
+				var response = pidCrypt.SHA512(challenge.concat(passphrase));
+				
+				// Send response
+				$.ajax({
+					url: api,
+					data: { fn: "login-response", response: response }
+				}).done(function(data) {
+					location.reload();
+				});
+			});
+		});
+		
+		// Check session and render root directory
+		$.ajax({
+			url: api,
+			data: { fn: "session" }
+		}).done(function(result) {
+			if(result == "logged")
+				cd("")
+			else
+				showLogin();
+		});
 	};
+	
+	var showLogin = function() {
+		$login.show();
+	}
 	
 	/** Change directory */
 	cd = function(path) {
