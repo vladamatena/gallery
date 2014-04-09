@@ -265,14 +265,14 @@
 		$exif = exif_read_data($src, 'EXIF');
 		$info = array();
 		
-		$info['date'] = $exif['DateTimeOriginal'];
-		$info['dimensions'] = $exif['ExifImageWidth'] . "x" . $exif['ExifImageLength'];
+		if(isset($exif['DateTimeOriginal'])) $info['date'] = $exif['DateTimeOriginal'];
+		if(isset($exif['ExifImageWidth']) && $exif['ExifImageLength']) $info['dimensions'] = $exif['ExifImageWidth'] . "x" . $exif['ExifImageLength'];
 		$info['size'] = formatBytes(filesize($src));
-		$info['model'] = $exif['Make'] . "(" . $exif['Model'] . ")";
-		$info['exposure'] = $exif['ExposureTime'];
-		$info['fnumber'] = $exif['FNumber'];
-		$info['iso'] = $exif['ISOSpeedRatings'];
-		$info['description'] = $exif['ImageDescription'];
+		if(isset($exif['Make']) && isset($exif['Model'])) $info['model'] = $exif['Make'] . "(" . $exif['Model'] . ")";
+		if(isset($exif['ExposureTime'])) $info['exposure'] = $exif['ExposureTime'];
+		if(isset($exif['FNumber'])) $info['fnumber'] = $exif['FNumber'];
+		if(isset($exif['ISOSpeedRatings'])) $info['iso'] = $exif['ISOSpeedRatings'];
+		if(isset($exif['ImageDescription'])) $info['description'] = $exif['ImageDescription'];
 		
 		header('Content-type: application/json');
 		echo(json_encode($info));

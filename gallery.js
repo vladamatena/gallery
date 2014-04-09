@@ -396,10 +396,11 @@ function Gallery(wrapper, api) {
 			url: api,
 			data: { fn: 'info', img: self.path + "/" + self.images[index].name }
 		}).done(function(info) {
+			console.log(info);
 			var data = [];
 			for(key in info)
 				data.push({name: key, value: info[key]});
-			
+			console.log(data);
 			$('.info', $viewer).html(Mustache.render(imageInfoTemplate, data));
 		});
 	}
