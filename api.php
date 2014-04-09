@@ -200,7 +200,7 @@
 		$small = $hashDir . "/" . $hash;
 		
 		// Ensure image
-		if(!is_file($small)) {
+		if(!is_file($small) || filemtime($src) > filemtime($small)) {
 			system('convert -thumbnail 128x128 "' . $src . '" "' . $small . '"');
 			touch($small);
 		}
@@ -221,7 +221,7 @@
 		$web = $hashDir . "/" . $hash;
 		
 		// Ensure image
-		if(!is_file($web)) {
+		if(!is_file($web) || filemtime($src) > filemtime($web)) {
 			system('convert "' . $src . '" -resize "1024x768>" -compress JPEG -quality 80  "' . $web . '"');
 			touch($web);
 		}
@@ -251,7 +251,8 @@
 		header("Content-type: image/jpg");
 		header("Content-Transfer-Encoding: binary");
 		date_default_timezone_set('UTC');
-		header("Last-Modified: " . date('r', filemtime($img)));
+		header("Last-Modified: " . date('r', filemtime($src)));
+		header("Cache-Control: max-age=3600, must-revalidate");
 		
 		readfile($img);
 	}
