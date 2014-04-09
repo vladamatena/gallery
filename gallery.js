@@ -117,7 +117,6 @@ function Gallery(wrapper, api) {
 		$('body').keydown(function(event) {
 			switch(event.which) {
 				case 27:
-					event.preventDefault();
 					closeViewer();
 					break;
 				case 39:
@@ -353,7 +352,7 @@ function Gallery(wrapper, api) {
 		} else if (document.mozCancelFullScreen) {  
 			document.mozCancelFullScreen();  
 		} else if (document.webkitCancelFullScreen) {  
-			document.webkitCancelFullScreen();  
+			document.webkitCancelFullScreen();
 		}
 	}
 	
