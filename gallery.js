@@ -57,31 +57,23 @@ function Gallery(wrapper, api) {
 			</div>\
 		</div>'
 	var itemDirectoryTemplate = '\
-		{{#.}}\
-			<div class="item {{type}}" data-name="{{name}}">\
+		{{#.}}<div class="item {{type}}" data-name="{{name}}">\
 				<span class="name">{{name}}</span>\
-			</div>\
-		{{/.}}';
+		</div>{{/.}}';
 	var itemImageTemplate = '\
-		{{#.}}\
-			<div class="item {{type}}" data-name="{{name}}">\
+		{{#.}}<div class="item {{type}}" data-name="{{name}}">\
 				<div class="thumb" style="background-image: url(\'{{thumb}}\');"></div>\
 				<span class="name">{{name}}</span>\
-			</div>\
-		{{/.}}';
+		</div>{{/.}}';
 	var itemCategorizedListTemplate = '\
 		<div class="category">{{category}}</div>\
-		{{#dirs}}\
-			<div class="item {{type}}" data-name="{{name}}">\
+		{{#dirs}}<div class="item {{type}}" data-name="{{name}}">\
 				<span class="name">{{name}}</span>\
-			</div>\
-		{{/dirs}}';
+		</div>{{/dirs}}';
 	var itemListingBreakTemplate = '\
 		<div class="listing-break"></div>';
 	var pathPartTemplate = '\
-		{{#.}}\
-			<span class="path-part" data-path="{{path}}">{{name}}</span>\
-		{{/.}}';
+		{{#.}}<span class="path-part" data-path="{{path}}">{{name}}</span>{{/.}}';
 	var imageInfoTemplate = '\
 		<table class="info-table">\
 			{{#.}}\
