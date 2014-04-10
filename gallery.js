@@ -25,7 +25,12 @@ function Gallery(wrapper, api) {
 	
 	var gallerytemplate = '\
 		<div class="gallery">\
-			<div class="path">Loading...</div>\
+			<div class="top-bar">\
+				<div class="path">Loading...</div>\
+				<div class="actions">\
+					<div class="action logout">Logout</div>\
+				</div>\
+			</div>\
 			<div class="listing">Loading...</div>\
 			<div class="viewer" style="display:none;">\
 				<div class="prev">\
@@ -95,6 +100,7 @@ function Gallery(wrapper, api) {
 		$path = $gallery.find('.path');
 		$viewer = $gallery.find('.viewer');
 		$login = $gallery.find('.login');
+		$logout = $gallery.find('.action.logout');
 		
 		// Show viewer controls on hover
 		$('.prev, .next, .menu', $viewer).hover(
@@ -136,6 +142,10 @@ function Gallery(wrapper, api) {
 			event.stopPropagation();
 		});
 		
+		// Hide logout when not logged in (p[asswordless gallery)
+		if(document.cookie.match(/ticket/) == null)
+			$logout.hide();
+		
 		// Login action
 		$('form', $login).submit(function(event) {
 			event.preventDefault();
@@ -157,6 +167,17 @@ function Gallery(wrapper, api) {
 				}).done(function(data) {
 					location.reload();
 				});
+			});
+		});
+		
+		// Logout action
+		$logout.click(function() {
+			// Logout
+			$.ajax({
+				url: api,
+				data: { fn: "logout" }
+			}).done(function() {
+				location.reload();
 			});
 		});
 		

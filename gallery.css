@@ -67,13 +67,19 @@
 	border: 1px solid #99ff00;
 }
 
+/** TOP - BAR **/
+.gallery .top-bar {
+	position: relative;
+	border-bottom: 1px solid #ff8000;
+	font-weight: bold;
+}
+
 /** PATH **/
 .gallery .path {
-	border-bottom: 1px solid #ff8000;
+	
 }
 
 .gallery .path > .path-part {
-	font-weight: bold;
 	cursor: pointer;
 	padding: 2px;
 	display: inline-block;
@@ -87,6 +93,26 @@
 
 .gallery .path > .path-part:not(:first-child):before {
 	content: ">";
+}
+
+/** ACTIONS **/
+.gallery .actions {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	border-left: 1px solid #ff8000;
+}
+
+.gallery .actions .action {
+	cursor: pointer;
+	padding: 2px;
+	display: inline-block;
+	border: 1px solid black;
+}
+
+.gallery .actions .action:hover {
+	color: #000000;
+	background-color: #FFCC80;
 }
 
 /** VIEWER **/
