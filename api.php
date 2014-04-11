@@ -172,6 +172,10 @@
 					else if(isFileImage($entry))
 						$item['type'] = "image";
 						else continue;
+					if($folder == "")
+						$item['path'] = $entry;
+					else
+						$item['path'] = "$folder/$entry";
 					
 					$items[] = $item;
 				}

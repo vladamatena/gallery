@@ -61,20 +61,18 @@ function Gallery(wrapper, api) {
 				</div>\
 			</div>\
 		</div>'
-	var itemDirectoryTemplate = '\
-		{{#.}}<div class="item {{type}}" data-name="{{name}}">\
-				<span class="name">{{name}}</span>\
-		</div>{{/.}}';
 	var itemImageTemplate = '\
 		{{#.}}<div class="item {{type}}" data-name="{{name}}">\
 				<div class="thumb" style="background-image: url(\'{{thumb}}\');"></div>\
 				<span class="name">{{name}}</span>\
 		</div>{{/.}}';
+	var itemDirectoryTemplate = '<div class="item {{type}}" data-name="{{name}}" data-path="{{path}}">\
+				<span class="name">{{name}}</span>\
+		</div>';
+	var itemDirectoryListTemplate = '{{#.}}' + itemDirectoryTemplate + '{{/.}}';
 	var itemCategorizedListTemplate = '\
 		<div class="category">{{category}}</div>\
-		{{#dirs}}<div class="item {{type}}" data-name="{{name}}">\
-				<span class="name">{{name}}</span>\
-		</div>{{/dirs}}';
+		{{#dirs}}' +  itemDirectoryTemplate + '{{/dirs}}';
 	var itemListingBreakTemplate = '\
 		<div class="listing-break"></div>';
 	var pathPartTemplate = '\
@@ -231,7 +229,7 @@ function Gallery(wrapper, api) {
 		var content = Mustache.render(pathPartTemplate, partObjs);
 		$path.html(content);
 		
-		// register path click events
+		// Register path click events
 		$('.path-part', $path).click(function() {
 			var path = $(this).data('path');
 			cd(path);
@@ -251,7 +249,7 @@ function Gallery(wrapper, api) {
 	
 	var renderDirFlat = function(dirs) {
 		dirs = sortItems(dirs);
-		return Mustache.render(itemDirectoryTemplate, dirs);
+		return Mustache.render(itemDirectoryListTemplate, dirs);
 	}
 	
 	var renderDirCategorized = function(dirs) {
@@ -316,11 +314,8 @@ function Gallery(wrapper, api) {
 		
 		// Register directory click events
 		$('.item.directory', $listing).click(function() {
-			var name = $(this).data('name');
-			if(self.path == "")
-				cd(name);
-			else
-				cd(self.path + "/" + name);
+			var path = $(this).data('path');
+			cd(path);
 		});
 		
 		// Register image click events
@@ -399,27 +394,31 @@ function Gallery(wrapper, api) {
 		// Set current index
 		self.currentImage = index;
 		
-		// Set image
+		// Set image and preloaders
 		$viewer.ready(function() {
-			console.log("Web image loaded: " + self.images[index].name);
-			var next = new Image();
-			next.src = self.images[nextIndex].web;
-			next.onload = function() {
-				console.log("Prealoaded web image: " + self.images[nextIndex].name);
-				var orig = new Image();
-				orig.src = self.images[index].src;
-				orig.onload = function() {
-					console.log("Source image loaded: " + self.images[index].name);
+			if(self.currentImage == index) {
+				console.log("Web image loaded: " + self.images[index].name);
+				var next = new Image();
+				next.src = self.images[nextIndex].web;
+				next.onload = function() {
+					console.log("Prealoaded web image: " + self.images[nextIndex].name);
 					if(self.currentImage == index) {
-						$viewer.css("background-image", 'url(\'' + self.images[index].src + '\')');
-						var nextOrig = new Image();
-						nextOrig.src = self.images[nextIndex].src;
-						nextOrig.onload = function() {
-							console.log("Preloaded source image: " + self.images[nextIndex].name);
+						var orig = new Image();
+						orig.src = self.images[index].src;
+						orig.onload = function() {
+							console.log("Source image loaded: " + self.images[index].name);
+							if(self.currentImage == index) {
+								$viewer.css("background-image", 'url(\'' + self.images[index].src + '\')');
+								var nextOrig = new Image();
+								nextOrig.src = self.images[nextIndex].src;
+								nextOrig.onload = function() {
+									console.log("Preloaded source image: " + self.images[nextIndex].name);
+								};
+							}
 						};
 					}
 				};
-			};
+			}
 		});
 		$viewer.css("background-image", 'url(\'' + self.images[index].web + '\')');
 		
