@@ -351,7 +351,6 @@ function Gallery(wrapper, api) {
 		}
 		
 		displayImage(index);
-		preloadImage(getNext(index));
 	}
 	
 	var closeViewer = function() {
@@ -385,18 +384,43 @@ function Gallery(wrapper, api) {
 	
 	var nextImg = function() {
 		displayImage(getNext(self.currentImage));
-		preloadImage(getNext(self.currentImage));
 	}
 	
 	var prevImg = function() {
 		displayImage(getPrev(self.currentImage));
-		preloadImage(getPrev(self.currentImage));
 	}
 	
 	var displayImage = function(index) {
+		// Get next expected image
+		var nextIndex = getNext(index);
+		if(self.currentImage > index)
+			nextIndex = getPrev(index);
+		
+		// Set current index
 		self.currentImage = index;
 		
 		// Set image
+		$viewer.ready(function() {
+			console.log("Web image loaded: " + self.images[index].name);
+			var next = new Image();
+			next.src = self.images[nextIndex].web;
+			next.onload = function() {
+				console.log("Prealoaded web image: " + self.images[nextIndex].name);
+				var orig = new Image();
+				orig.src = self.images[index].src;
+				orig.onload = function() {
+					console.log("Source image loaded: " + self.images[index].name);
+					if(self.currentImage == index) {
+						$viewer.css("background-image", 'url(\'' + self.images[index].src + '\')');
+						var nextOrig = new Image();
+						nextOrig.src = self.images[nextIndex].src;
+						nextOrig.onload = function() {
+							console.log("Preloaded source image: " + self.images[nextIndex].name);
+						};
+					}
+				};
+			};
+		});
 		$viewer.css("background-image", 'url(\'' + self.images[index].web + '\')');
 		
 		// Set image name
@@ -408,18 +432,11 @@ function Gallery(wrapper, api) {
 			url: api,
 			data: { fn: 'info', img: self.path + "/" + self.images[index].name }
 		}).done(function(info) {
-			console.log(info);
 			var data = [];
 			for(key in info)
 				data.push({name: key, value: info[key]});
-			console.log(data);
 			$('.info', $viewer).html(Mustache.render(imageInfoTemplate, data));
 		});
-	}
-	
-	var preloadImage = function(index) {
-		var img = new Image();
-		img.src = self.images[index].web;
 	}
 	
 	// Initialize gallery
