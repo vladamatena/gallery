@@ -196,8 +196,9 @@
 
 .gallery .viewer .menu .exit {
 	position: absolute;
-	right: 5px;
-	top: 5px;
+	right: 0px;
+	top: 0px;
+	padding: 5px;
 	font-size: 70px;
 	font-family: monospace;
 	font-weight: bold;
