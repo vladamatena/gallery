@@ -28,6 +28,7 @@ function Gallery(wrapper, api) {
 			<div class="top-bar">\
 				<div class="path">Loading...</div>\
 				<div class="actions">\
+					<div class="action zip">&darr;</div>\
 					<div class="action logout">Logout</div>\
 				</div>\
 			</div>\
@@ -99,6 +100,7 @@ function Gallery(wrapper, api) {
 		$viewer = $gallery.find('.viewer');
 		$login = $gallery.find('.login');
 		$logout = $gallery.find('.action.logout');
+		$zip = $gallery.find('.action.zip');
 		
 		// Show viewer controls on hover
 		$('.prev, .next, .menu', $viewer).hover(
@@ -132,6 +134,10 @@ function Gallery(wrapper, api) {
 		$(document).on("mozfullscreenchange", function() {
 			if(!document.mozIsFullScreen)
 				closeViewer();
+		});
+		$zip.click(function() {
+			var zip = api + "?" + $.param({fn: "zip", folder: self.path});
+			window.location.href = zip;
 		});
 		
 		// Prevent unwanted actions
