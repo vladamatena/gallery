@@ -3,7 +3,9 @@
 	
 	date_default_timezone_set('UTC');
 	
-	$function = $_GET['fn'];
+	$function = "undefined";
+	if(isset($_GET['fn']))
+		$function = $_GET['fn'];
 	
 	// Check user is logged in
 	if($function != "login-challenge" && $function != "login-response")
@@ -13,6 +15,9 @@
 	switch($function) {
 		case "ls":
 			ls($_GET['folder']);
+			break;
+		case "zip":
+			zip($_GET['folder']);
 			break;
 		case "thumb":
 			get("small", $_GET['img']);
@@ -42,7 +47,7 @@
 			logout();
 			break;
 		default:
-			apiError("Bad command: " . $_GET['fn']);
+			apiError("Bad command: $function");
 	}
 	
 	function validate() {
@@ -189,6 +194,15 @@
 	function ls($folder) {
 		header('Content-type: application/json');
 		echo(json_encode(listFolder($folder)));
+	}
+	
+	function zip($folder) {
+		GLOBAL $gallery;
+		header('Content-type: application/zip');
+		header("Content-Disposition: attachment; filename=" . urlencode($folder . ".zip"));
+		chdir($gallery['root']);
+		passthru("zip -0 -r - \"$folder\"");
+		exit();
 	}
 	
 	function api_makeSmall($image) {

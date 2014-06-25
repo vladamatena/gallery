@@ -28,8 +28,8 @@ function Gallery(wrapper, api) {
 			<div class="top-bar">\
 				<div class="path">Loading...</div>\
 				<div class="actions">\
-					<div class="action zip">&darr;</div>\
-					<div class="action logout">Logout</div>\
+					<div class="break"><div class="action zip">ZIP directory</div></div>\
+					<div class="break"><div class="action logout">Logout</div></div>\
 				</div>\
 			</div>\
 			<div class="listing">Loading...</div>\
