@@ -156,6 +156,10 @@
 		return preg_match('/\.[jJ][pP][eE]?[gG]$/', $name);
 	}
 	
+	function isFileVideo($name) {
+		return preg_match('/\.[mM][pP][4]$/', $name);
+	}
+	
 	function listFolder($folder) {
 		GLOBAL $gallery;
 		
@@ -176,7 +180,9 @@
 						$item['type'] = "directory";
 					else if(isFileImage($entry))
 						$item['type'] = "image";
-						else continue;
+					else if(isFileVideo($entry))
+						$item['type'] = "video";
+					else continue;
 					if($folder == "")
 						$item['path'] = $entry;
 					else
@@ -219,7 +225,11 @@
 		
 		// Ensure image
 		if(!is_file($small) || filemtime($src) > filemtime($small)) {
-			system('convert -thumbnail 128x128 "' . $src . '" "' . $small . '"');
+			if(isFileImage($src))
+				system('convert -thumbnail 128x128 "' . $src . '" "' . $small . '"');
+			if(isFileVideo($src))
+				system('ffmpegthumbnailer -s 128 -q10 -c png -i"' . $src . '" -o "' . $small . '"');
+			
 			touch($small);
 		}
 		
