@@ -11,6 +11,7 @@ function Gallery(wrapper, api) {
 	var $listing = null;
 	var $viewer = null;
 	var $login = null;
+	var $topbar = null;
 	
 	/// Gallery API URL
 	var api = api;
@@ -101,6 +102,7 @@ function Gallery(wrapper, api) {
 		$login = $gallery.find('.login');
 		$logout = $gallery.find('.action.logout');
 		$zip = $gallery.find('.action.zip');
+		$topbar = $gallery.find('.top-bar');
 		
 		// Show viewer controls on hover
 		$('.prev, .next, .menu', $viewer).hover(
@@ -354,6 +356,7 @@ function Gallery(wrapper, api) {
 		// Show viewer and hide gallery
 		$viewer.show();
 		$listing.hide();
+		$topbar.hide();
 		
 		// Go fullscreen
 		if (document.documentElement.requestFullScreen) {
@@ -371,6 +374,7 @@ function Gallery(wrapper, api) {
 		// Hide viewer show listing
 		$listing.show();
 		$viewer.hide();
+		$topbar.show();
 		
 		// Stop fullscreen
 		if (document.cancelFullScreen) {  
