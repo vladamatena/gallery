@@ -228,7 +228,7 @@
 			if(isFileImage($src))
 				system('convert -thumbnail 128x128 "' . $src . '" "' . $small . '"');
 			if(isFileVideo($src))
-				system('ffmpegthumbnailer -s 128 -q10 -c png -i"' . $src . '" -o "' . $small . '"');
+				system('ffmpegthumbnailer -s 128 -c jpg -i"' . $src . '" -o "' . $small . '"');
 			
 			touch($small);
 		}

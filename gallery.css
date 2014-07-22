@@ -93,12 +93,13 @@
 	border: 1px solid #ff8000;
 	background-repeat: no-repeat;
 	background-position: center;
-	color: rgba(128,128,128,0.5);
+	color: rgba(80,80,80,0.85);
+	font-family: monospace;
 	font-size: 96px;
 }
 
 .gallery .listing .item.video .thumb::after {
-		content: "▶";
+	content: "▶";
 }
 
 .gallery .listing .item.video:hover .thumb {
