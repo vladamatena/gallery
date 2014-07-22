@@ -191,11 +191,21 @@ function Gallery(wrapper, api) {
 			data: { fn: "session" }
 		}).done(function(result) {
 			if(result == "logged")
-				cd("")
+				cd(getCurrentPath());
 			else
 				showLogin();
 		});
 	};
+	
+	var getCurrentPath = function() {
+		var search = location.search.substring(1);
+		var obj = {'path': ''};
+		
+		if(search.length > 0)
+			obj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+		
+		return obj.path;
+	}
 	
 	var showLogin = function() {
 		$login.show();
@@ -206,6 +216,9 @@ function Gallery(wrapper, api) {
 		// Set path
 		self.path = path;
 		renderPath(path);
+		
+		// Store path in history
+		history.replaceState({value: 1, value2: "X"}, "title", "index.html?path=" + path);
 		
 		// Load listing
 		$.ajax({
