@@ -88,6 +88,12 @@ function Gallery(wrapper, api) {
 				</tr>\
 			{{/.}}\
 		</table>';
+	var videoPlayerTemplate = '\
+		<video width="100%" height="100%" controls>\
+			<source src="{{url}}" consols="true" autoplay="true">\
+			Your browser does not support the video tag.\
+		</video>';
+		
 		
 	/** Gallery initialization */
 	init = function() {
@@ -148,7 +154,7 @@ function Gallery(wrapper, api) {
 			event.stopPropagation();
 		});
 		
-		// Hide logout when not logged in (p[asswordless gallery)
+		// Hide logout when not logged in (passwordless gallery)
 		if(document.cookie.match(/ticket/) == null)
 			$logout.hide();
 		
@@ -309,6 +315,7 @@ function Gallery(wrapper, api) {
 			this.thumb = api + "?fn=thumb&img=" + self.path + "/" + this.name;
 			this.web = api + "?fn=web&img=" + self.path + "/" + this.name;
 			this.src = api + "?fn=img&img=" + self.path + "/" + this.name;
+			this.video = api + "?fn=video&img=" + self.path + "/" + this.name;
 		});
 		
 		// Render elements
@@ -340,7 +347,7 @@ function Gallery(wrapper, api) {
 		});
 		
 		// Register image click events
-		$('.item.image', $listing).click(function() {
+		$('.item.image, .item.video', $listing).click(function() {
 			var name = $(this).data('name');
 			// Find index for name
 			var index = 0;
@@ -367,7 +374,7 @@ function Gallery(wrapper, api) {
 			document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
 		}
 		
-		displayImage(index);
+		display(index);
 	}
 	
 	var closeViewer = function() {
@@ -375,6 +382,8 @@ function Gallery(wrapper, api) {
 		$listing.show();
 		$viewer.hide();
 		$topbar.show();
+		
+		resetViewer();
 		
 		// Stop fullscreen
 		if (document.cancelFullScreen) {  
@@ -401,11 +410,34 @@ function Gallery(wrapper, api) {
 	}
 	
 	var nextImg = function() {
-		displayImage(getNext(self.currentImage));
+		display(getNext(self.currentImage));
 	}
 	
 	var prevImg = function() {
-		displayImage(getPrev(self.currentImage));
+		display(getPrev(self.currentImage));
+	}
+	
+	var resetViewer = function() {
+		// Remove old content
+		$viewer.find('video').remove();
+		$viewer.css("background-image", '');
+	}
+	
+	var display = function(index) {
+		// Set current index
+		self.currentImage = index;
+		
+		resetViewer();
+		
+		if(self.images[index].type == 'image')
+			displayImage(index);
+		if(self.images[index].type == 'video')
+			displayVideo(index);
+	}
+	
+	var displayVideo = function(index) {
+		var content = Mustache.render(videoPlayerTemplate, {url: self.images[index].video});
+		$(content).prependTo($viewer);
 	}
 	
 	var displayImage = function(index) {

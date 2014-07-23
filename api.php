@@ -28,6 +28,9 @@
 		case "img":
 			get("src", $_GET['img']);
 			break;
+		case "video":
+			get("video", $_GET['img']);
+			break;
 		case "info":
 			info($_GET['img']);
 			break;
@@ -263,6 +266,7 @@
 		$src = $gallery['root'] . "/" . $image;
 		
 		switch($size) {
+			case "video":
 			case "src":
 				$img = $src;
 				break;
@@ -276,13 +280,16 @@
 				apiError("Image size: " . $size . " not uspported");
 		}
 		
-		header("Content-type: image/jpg");
-		header("Content-Transfer-Encoding: binary");
-		date_default_timezone_set('UTC');
-		header("Last-Modified: " . date('r', filemtime($src)));
-		header("Cache-Control: max-age=3600, must-revalidate");
-		
-		readfile($img);
+/*		if($size == "video")
+			header("Content-type: video/mp4");
+		else
+			header("Content-type: image/jpg");
+	*/
+	
+	
+	//	readfile($img);
+	
+		sendFile($img);
 	}
 		
 	function info($image) {
@@ -360,5 +367,77 @@
 		$bytes /= (1 << (10 * $pow)); 
 
 		return round($bytes, $precision) . ' ' . $units[$pow];
+	}
+		
+	function sendFile($file) {
+		header('Content-Type: ' . mime_content_type($file));
+		header('Content-Disposition: attachment; filename="' . basename($file) . '"');
+	
+		$fp = @fopen($file, 'rb');
+
+		$size   = filesize($file); // File size
+		$length = $size;           // Content length
+		$start  = 0;               // Start byte
+		$end    = $size - 1;       // End byte
+		
+		header("Accept-Ranges: 0-$length");
+		
+		if (isset($_SERVER['HTTP_RANGE'])) {
+			$c_start = $start;
+			$c_end   = $end;
+			// Extract the range string
+			list(, $range) = explode('=', $_SERVER['HTTP_RANGE'], 2);
+			// Make sure the client hasn't sent us a multibyte range
+			if (strpos($range, ',') !== false) {
+				header('HTTP/1.1 416 Requested Range Not Satisfiable');
+				header("Content-Range: bytes $start-$end/$size");
+				exit;
+			}
+			// If the range starts with an '-' we start from the beginning
+			// If not, we forward the file pointer
+			// And make sure to get the end byte if spesified
+			if ($range{0} == '-') {
+				// The n-number of the last bytes is requested
+				$c_start = $size - substr($range, 1);
+			} else {
+				$range  = explode('-', $range);
+				$c_start = $range[0];
+				$c_end   = (isset($range[1]) && is_numeric($range[1])) ? $range[1] : $size;
+			}
+			/* Check the range and make sure it's treated according to the specs.
+			* http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+			*/
+			// End bytes can not be larger than $end.
+			$c_end = ($c_end > $end) ? $end : $c_end;
+			// Validate the requested range and return an error if it's not correct.
+			if ($c_start > $c_end || $c_start > $size - 1 || $c_end >= $size) {
+				header('HTTP/1.1 416 Requested Range Not Satisfiable');
+				header("Content-Range: bytes $start-$end/$size");
+				exit;
+			}
+			$start  = $c_start;
+			$end    = $c_end;
+			$length = $end - $start + 1; // Calculate new content length
+			fseek($fp, $start);
+			header('HTTP/1.1 206 Partial Content');
+		}
+		// Notify the client the byte range we'll be outputting
+		header("Content-Range: bytes $start-$end/$size");
+		header("Content-Length: $length");
+
+		// Start buffered download
+		$buffer = 1024 * 8;
+		while(!feof($fp) && ($p = ftell($fp)) <= $end) {
+			if ($p + $buffer > $end) {
+				// In case we're only outputtin a chunk, make sure we don't
+				// read past the length
+				$buffer = $end - $p + 1;
+			}
+			set_time_limit(0); // Reset time limit for big files
+			echo fread($fp, $buffer);
+			flush(); // Free up memory. Otherwise large files will trigger PHP's memory limit.
+		}
+
+		fclose($fp);
 	}
 ?>
