@@ -34,7 +34,7 @@ function Gallery(wrapper, api) {
 				</div>\
 			</div>\
 			<div class="listing">Loading...</div>\
-			<div class="viewer" style="display:none;">\
+			<div class="viewer" style="display:none;" data-zoom="1" data-pos-x="0" data-pos-y="0">\
 				<div class="prev">\
 					<div class="inner" style="display: none;">\
 						<span class="nav"><</span>\
@@ -140,8 +140,8 @@ function Gallery(wrapper, api) {
 				closeViewer();
 		});
 		$(document).on("mozfullscreenchange", function() {
-			if(!document.mozIsFullScreen)
-				closeViewer();
+	//		if(!document.mozIsFullScreen)
+	//			closeViewer();
 		});
 		$zip.click(function() {
 			var zip = api + "?" + $.param({fn: "zip", folder: self.path});
@@ -357,6 +357,66 @@ function Gallery(wrapper, api) {
 			});
 			openViewer(index);
 		});
+		
+		$viewer.bind("mousewheel", function(event) {
+		//	if(!event.ctrlKey)
+		//		return;
+			/*console.log("ctrl:", event.ctrlKey);
+			console.log("cx: ", event.clientX);
+			console.log("cy: ", event.clientY);
+			console.log("ox: ", event.offsetX);
+			console.log("oy: ", event.offsetY);
+			console.log("px: ", event.pageX);
+			console.log("py: ", event.pageY);
+			console.log("delta: ", event.originalEvent.wheelDelta);
+			console.log(event);
+			*/
+			
+			
+			var img = new Image();
+			img.src = $viewer.css('background-image').replace(/url\(|\)$|"/ig, '');
+					
+			// Update zoom value
+			var oldZoom = $viewer.data("zoom");
+			var zoom = oldZoom;
+			var zoomStep = 1.05;
+			if(event.originalEvent.wheelDelta > 0)
+				zoom *= zoomStep;
+			else
+				zoom /= zoomStep;
+			if(zoom < 1)
+				zoom = 1;
+			$viewer.data("zoom", zoom);
+			
+			// Zoom image
+			var scale = Math.min($viewer.height() / img.height, $viewer.width() / img.width);
+			$viewer.css('background-size', scale * zoom * img.width + "px " + scale * zoom * img.height + "px");
+			
+			// Shift image
+			var dx = (event.clientX - $viewer.width() / 2);
+			var dy = (event.clientY - $viewer.height() / 2);
+			
+			
+			console.log({dx: dx, dy:dy});
+			
+			
+			var px = $viewer.data("pos-x");
+			var py = $viewer.data("pos-y");
+			
+			px -= dx * 2;
+			py -= dy * 2;
+			
+			$viewer.data("pos-x", px);
+			$viewer.data("pos-y", py);
+			
+			console.log({px: px, py:py});
+			
+			sx = event.clientX;
+			sy = event.clientY;
+			
+		//	$viewer.css('background-position', sx + "px " + sy + "px");
+		
+		});
 	};
 	
 	var openViewer = function(index) {
@@ -420,7 +480,12 @@ function Gallery(wrapper, api) {
 	var resetViewer = function() {
 		// Remove old content
 		$viewer.find('video').remove();
+		$viewer.find('img').remove();
 		$viewer.css("background-image", '');
+		
+		// Reset zoom
+		$viewer.css('background-size', 'contain');
+		$viewer.data("zoom", 1);
 	}
 	
 	var display = function(index) {
