@@ -370,10 +370,15 @@
 	}
 		
 	function sendFile($file) {
+		$fp = @fopen($file, 'rb');
+		
+		if(!@fp) {
+			header("HTTP/1.0 404 Not Found");
+			exit();
+		}
+		
 		header('Content-Type: ' . mime_content_type($file));
 		header('Content-Disposition: attachment; filename="' . basename($file) . '"');
-	
-		$fp = @fopen($file, 'rb');
 
 		$size   = filesize($file); // File size
 		$length = $size;           // Content length
