@@ -14,10 +14,16 @@
 	// Execute requested function
 	switch($function) {
 		case "ls":
-			ls($_GET['folder']);
+			if(isset($_GET['folder']))
+				ls($_GET['folder']);
+			else
+				ls("");
 			break;
 		case "zip":
-			zip($_GET['folder']);
+			if(isset($_GET['folder']))
+				zip($_GET['folder']);
+			else
+				echo "404 No such directory";
 			break;
 		case "thumb":
 			get("small", $_GET['img']);
@@ -173,7 +179,7 @@
 		// Get folder content
 		$path = $gallery['root'] . "/$folder";
 		$items = array();
-		if($handle = opendir($path)) {
+		if(file_exists($path) && $handle = opendir($path)) {
 			while(false !== ($entry = readdir($handle))) {
 				if($entry != "." && $entry != ".." && !preg_match('/^\..*/', $entry)) {
 					// Add new item
