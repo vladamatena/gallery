@@ -259,8 +259,10 @@
 		
 		// Ensure image
 		if(!is_file($web) || filemtime($src) > filemtime($web)) {
-			system('convert "' . $src . '" -resize "1024x768>" -compress JPEG -quality 80  "' . $web . '"');
-			touch($web);
+			if(isFileImage($src)) {
+				system('convert "' . $src . '" -resize "1024x768>" -compress JPEG -quality 80  "' . $web . '"');
+				touch($web);
+			}
 		}
 		
 		return $web;
