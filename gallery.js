@@ -212,7 +212,10 @@ function Gallery(wrapper, api) {
 		if(search.length > 0)
 			obj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 		
-		return obj.path;
+		if(typeof obj.path != 'undefined')
+			return obj.path;
+		else
+			return "";
 	}
 	
 	var showLogin = function() {
