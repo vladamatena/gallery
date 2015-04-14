@@ -233,7 +233,7 @@
 		$small = $hashDir . "/" . $hash;
 		
 		// Ensure image
-		if(!is_file($small) || filemtime($src) > filemtime($small)) {
+		if(!is_file($small) || filemtime($src) > filemtime($small) || filesize($small) == 0) {
 			if(isFileImage($src))
 				system('convert -thumbnail 128x128 "' . $src . '" "' . $small . '"');
 			if(isFileVideo($src))
@@ -258,7 +258,7 @@
 		$web = $hashDir . "/" . $hash;
 		
 		// Ensure image
-		if(!is_file($web) || filemtime($src) > filemtime($web)) {
+		if(!is_file($web) || filemtime($src) > filemtime($web) || filesize($web) == 0) {
 			if(isFileImage($src)) {
 				system('convert "' . $src . '" -resize "1024x768>" -compress JPEG -quality 80  "' . $web . '"');
 				touch($web);
@@ -380,7 +380,7 @@
 	function sendFile($file) {
 		$fp = @fopen($file, 'rb');
 		
-		if(!@fp) {
+		if(!file_exists($file) | !@fp) {
 			header("HTTP/1.0 404 Not Found");
 			exit();
 		}
