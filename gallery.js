@@ -315,12 +315,13 @@ function Gallery(wrapper, api) {
 		
 		// Add data to items
 		$(items).each(function() {
-			this.thumb = api + "?fn=thumb&img=" + self.path + "/" + this.name;
-			this.web = api + "?fn=web&img=" + self.path + "/" + this.name;
-			this.src = api + "?fn=img&img=" + self.path + "/" + this.name;
-			this.video = api + "?fn=video&img=" + self.path + "/" + this.name;
+			var img = encodeURIComponent(self.path + "/" + this.name)
+			this.thumb = api + "?fn=thumb&img=" + img;
+			this.web = api + "?fn=web&img=" + img;
+			this.src = api + "?fn=img&img=" + img;
+			this.video = api + "?fn=video&img=" + img;
 		});
-		
+				
 		// Render elements
 		var content = "";
 		
