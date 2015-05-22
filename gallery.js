@@ -363,23 +363,9 @@ function Gallery(wrapper, api) {
 		});
 		
 		$viewer.bind("mousewheel", function(event) {
-		//	if(!event.ctrlKey)
-		//		return;
-			/*console.log("ctrl:", event.ctrlKey);
-			console.log("cx: ", event.clientX);
-			console.log("cy: ", event.clientY);
-			console.log("ox: ", event.offsetX);
-			console.log("oy: ", event.offsetY);
-			console.log("px: ", event.pageX);
-			console.log("py: ", event.pageY);
-			console.log("delta: ", event.originalEvent.wheelDelta);
-			console.log(event);
-			*/
-			
-			
 			var img = new Image();
 			img.src = $viewer.css('background-image').replace(/url\(|\)$|"/ig, '');
-					
+			
 			// Update zoom value
 			var oldZoom = $viewer.data("zoom");
 			var zoom = oldZoom;
@@ -457,6 +443,10 @@ function Gallery(wrapper, api) {
 		} else if (document.webkitCancelFullScreen) {  
 			document.webkitCancelFullScreen();
 		}
+		
+		// Scroll to image in image listing
+		var $target = $('.image[data-name="' + self.images[self.currentImage].name + '"]');
+		$("body").scrollTop($target.offset().top - $(window).height() / 2 + $target.height() / 2);
 	}
 	
 	var getNext = function(index) {
