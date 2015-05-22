@@ -362,6 +362,7 @@ function Gallery(wrapper, api) {
 			openViewer(index);
 		});
 		
+		// Handle zooming the image by mouse wheel
 		$viewer.bind("mousewheel", function(event) {
 			var img = new Image();
 			img.src = $viewer.css('background-image').replace(/url\(|\)$|"/ig, '');
@@ -381,31 +382,35 @@ function Gallery(wrapper, api) {
 			// Zoom image
 			var scale = Math.min($viewer.height() / img.height, $viewer.width() / img.width);
 			$viewer.css('background-size', scale * zoom * img.width + "px " + scale * zoom * img.height + "px");
-			
-			// Shift image
-			var dx = (event.clientX - $viewer.width() / 2);
-			var dy = (event.clientY - $viewer.height() / 2);
-			
-			
-			console.log({dx: dx, dy:dy});
-			
-			
-			var px = $viewer.data("pos-x");
-			var py = $viewer.data("pos-y");
-			
-			px -= dx * 2;
-			py -= dy * 2;
-			
-			$viewer.data("pos-x", px);
-			$viewer.data("pos-y", py);
-			
-			console.log({px: px, py:py});
-			
-			sx = event.clientX;
-			sy = event.clientY;
-			
-		//	$viewer.css('background-position', sx + "px " + sy + "px");
+		});
 		
+		
+		/// Handle drag and drop image shifting
+		$viewer.bind("mousedown", function(event) {
+			$viewer.mouseStart = {
+				x:event.clientX,
+				y:event.clientY
+			};
+		});
+		
+		$viewer.bind("mouseup", function(event) {
+			delete $viewer.mouseStart;
+		});
+		
+		$viewer.bind("mousemove", function(event) {
+			// Do nothing when mouse is not down
+			if(typeof $viewer.mouseStart == 'undefined')
+				return;
+			
+			$viewer.shift.x += event.clientX - $viewer.mouseStart.x;
+			$viewer.shift.y += event.clientY - $viewer.mouseStart.y;
+			
+			$viewer.mouseStart = {
+				x:event.clientX,
+				y:event.clientY
+			};
+			
+			$viewer.css("background-position", "calc(50% + " + $viewer.shift.x + "px) calc(50% + " + $viewer.shift.y + "px)");
 		});
 	};
 	
@@ -480,6 +485,13 @@ function Gallery(wrapper, api) {
 		// Reset zoom
 		$viewer.css('background-size', 'contain');
 		$viewer.data("zoom", 1);
+		
+		// Reset shift
+		$viewer.css("background-position", "50% 50%");
+		$viewer.shift = {
+			x:0,
+			y:0
+		};
 	}
 	
 	var display = function(index) {
