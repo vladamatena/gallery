@@ -521,6 +521,7 @@ function Gallery(wrapper, api) {
 		self.currentImage = index;
 		
 		// Set image and preloaders
+		$viewer.css("background-image", 'url(\'' + self.images[index].web + '\')');
 		$viewer.ready(function() {
 			if(self.currentImage == index) {
 				console.log("Web image loaded: " + self.images[index].name);
@@ -528,25 +529,9 @@ function Gallery(wrapper, api) {
 				next.src = self.images[nextIndex].web;
 				next.onload = function() {
 					console.log("Prealoaded web image: " + self.images[nextIndex].name);
-					if(self.currentImage == index) {
-						var orig = new Image();
-						orig.src = self.images[index].src;
-						orig.onload = function() {
-							console.log("Source image loaded: " + self.images[index].name);
-							if(self.currentImage == index) {
-								$viewer.css("background-image", 'url(\'' + self.images[index].src + '\')');
-								var nextOrig = new Image();
-								nextOrig.src = self.images[nextIndex].src;
-								nextOrig.onload = function() {
-									console.log("Preloaded source image: " + self.images[nextIndex].name);
-								};
-							}
-						};
-					}
 				};
 			}
 		});
-		$viewer.css("background-image", 'url(\'' + self.images[index].web + '\')');
 		
 		// Set image name
 		$('.name', $viewer).text(self.images[index].name);
