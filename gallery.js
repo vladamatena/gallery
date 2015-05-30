@@ -127,7 +127,7 @@ function Gallery(wrapper, api) {
 		$('.prev', $viewer).click(prevImg);
 		$('.next', $viewer).click(nextImg);
 		$('.save', $viewer).click(downloadSourceImage);
-		$('.original', $viewer).click(function() {alert("Show original")});
+		$('.original', $viewer).click(displayOriginal);
 		$('body').keydown(function(event) {
 			switch(event.which) {
 				case 27:
@@ -562,6 +562,13 @@ function Gallery(wrapper, api) {
 	 */
 	var downloadSourceImage = function() {
 		window.location.href = self.images[self.currentImage].src;
+	}
+	
+	/**
+	 * Displays original image version in the viewer
+	 */
+	var displayOriginal = function() {
+		$viewer.css("background-image", 'url(\'' + self.images[self.currentImage].src + '\')');
 	}
 	
 	// Initialize gallery
