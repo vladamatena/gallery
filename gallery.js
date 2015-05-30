@@ -37,19 +37,25 @@ function Gallery(wrapper, api) {
 			<div class="viewer" style="display:none;" data-zoom="1" data-pos-x="0" data-pos-y="0">\
 				<div class="prev">\
 					<div class="inner" style="display: none;">\
-						<span class="nav"><</span>\
+						<span class="nav" title="previous image"><</span>\
 					</div>\
 				</div>\
 				<div class="next">\
 					<div class="inner" style="display: none;">\
-						<span class="nav">></span>\
+						<span class="nav" title="next image">></span>\
 					</div>\
 				</div>\
-				<div class="menu">\
+				<div class="top-menu">\
 					<div class="inner" style="display: none;">\
 						<div class="info"></div>\
 						<div class="name"></div>\
-						<div class="exit">x</div>\
+						<div class="exit button" title="exit">x</div>\
+					</div>\
+				</div>\
+				<div class="bottom-menu">\
+					<div class="inner" style="display: none;">\
+						<div class="save button" title="download full resolution image">&#x21E9;</div>\
+						<div class="original button" title="full resolution">&#x2592;</div>\
 					</div>\
 				</div>\
 			</div>\
@@ -111,7 +117,7 @@ function Gallery(wrapper, api) {
 		$topbar = $gallery.find('.top-bar');
 		
 		// Show viewer controls on hover
-		$('.prev, .next, .menu', $viewer).hover(
+		$('.prev, .next, .top-menu, .bottom-menu', $viewer).hover(
 			function () { $('.inner', this).fadeIn(50); },
 			function () { $('.inner', this).fadeOut(); }
 		);
@@ -120,6 +126,8 @@ function Gallery(wrapper, api) {
 		$('.exit', $viewer).click(closeViewer);
 		$('.prev', $viewer).click(prevImg);
 		$('.next', $viewer).click(nextImg);
+		$('.save', $viewer).click(downloadSourceImage);
+		$('.original', $viewer).click(function() {alert("Show original")});
 		$('body').keydown(function(event) {
 			switch(event.which) {
 				case 27:
@@ -547,6 +555,13 @@ function Gallery(wrapper, api) {
 				data.push({name: key, value: info[key]});
 			$('.info', $viewer).html(Mustache.render(imageInfoTemplate, data));
 		});
+	}
+	
+	/**
+	 * Downloads current image source
+	 */
+	var downloadSourceImage = function() {
+		window.location.href = self.images[self.currentImage].src;
 	}
 	
 	// Initialize gallery

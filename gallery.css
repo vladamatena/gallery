@@ -179,7 +179,7 @@
 		display: none;
 	}
 	
-	.gallery .viewer .menu {
+	.gallery .viewer .top-menu {
 		display: none;
 	}
 	
@@ -258,7 +258,7 @@
 	margin-top: -0.5em;
 }
 
-.gallery .viewer .menu {
+.gallery .viewer .top-menu {
 	position: absolute;
 	min-height: 10%;
 	top: 0px;
@@ -268,16 +268,19 @@
 	font-weight: bold;
 }
 
-.gallery .viewer .menu .info {
+.gallery .viewer .top-menu .info {
 	position: absolute;
 	left: 4px;
 	text-align: left;
 }
 
-.gallery .viewer .menu .exit {
+.gallery .viewer .top-menu .exit {
 	position: absolute;
 	right: 0px;
 	top: 0px;
+}
+
+.gallery .viewer .button {
 	padding: 5px;
 	font-size: 70px;
 	font-family: monospace;
@@ -285,9 +288,27 @@
 	line-height: 36px;
 }
 
-.gallery .viewer .menu .exit:hover {
+.gallery .viewer .button:hover {
 	color: #99FF00;
 	text-shadow: 0px 0px 18px #99FF00;
+}
+
+.gallery .viewer .bottom-menu {
+	position: absolute;
+	min-height: 10%;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	text-align: right;
+	font-weight: bold;
+}
+
+.gallery .viewer .bottom-menu .save {
+	display: inline-block;
+}
+
+.gallery .viewer .bottom-menu .original {
+	display: inline-block;
 }
 
 /** LOGIN **/
