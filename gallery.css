@@ -14,6 +14,24 @@
 	margin: 5px;
 }
 
+.gallery .listing .dirs.categorized {
+	display: flex;
+	flex-direction: column;
+}
+
+.gallery .listing .dirs {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+}
+
+.gallery .listing .images {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
 /** LISTING - DIRECTORY **/
 .gallery .listing .item.directory {
 	margin: 2px;

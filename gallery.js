@@ -70,19 +70,33 @@ function Gallery(wrapper, api) {
 			</div>\
 		</div>'
 	var itemImageTemplate = '\
-		{{#.}}<div class="item {{type}}" data-name="{{name}}">\
+		<div class="images">\
+			{{#.}}<div class="item {{type}}" data-name="{{name}}">\
 				<div class="thumb" style="background-image: url(\'{{thumb}}\');"></div>\
 				<span class="name">{{name}}</span>\
-		</div>{{/.}}';
-	var itemDirectoryTemplate = '<div class="item {{type}}" data-name="{{name}}" data-path="{{path}}">\
-				<span class="name">{{name}}</span>\
+			</div>{{/.}}\
 		</div>';
-	var itemDirectoryListTemplate = '{{#.}}' + itemDirectoryTemplate + '{{/.}}';
+	var itemDirectoryTemplate = '\
+		<div class="item {{type}}" data-name="{{name}}" data-path="{{path}}">\
+			<span class="name">{{name}}</span>\
+		</div>';
+	var itemDirectoryListTemplate = '\
+		<div class="dirs noncategorized">\
+			{{#.}}\
+				' + itemDirectoryTemplate + '\
+			{{/.}}\
+		</div>';
 	var itemCategorizedListTemplate = '\
-		<div class="category">{{category}}</div>\
-		{{#dirs}}' +  itemDirectoryTemplate + '{{/dirs}}';
-	var itemListingBreakTemplate = '\
-		<div class="listing-break"></div>';
+		<div class="dirs categorized"> \
+			{{#.}}\
+			<div class="category">\
+				<span class="label">{{category}}</span>\
+				<div class="dirs">\
+					{{#dirs}}' + itemDirectoryTemplate + '{{/dirs}}\
+				</div>\
+			</div>\
+			{{/.}}\
+		</div>';
 	var pathPartTemplate = '\
 		{{#.}}<span class="path-part" data-path="{{path}}">{{name}}</span>{{/.}}';
 	var imageInfoTemplate = '\
@@ -304,11 +318,12 @@ function Gallery(wrapper, api) {
 			categ[cat].push(this);
 		});
 		
-		var ret = "";
-		for(cat in categ)
-			ret += Mustache.render(itemCategorizedListTemplate, {category: cat, dirs: categ[cat]});
+		var data = [];
+		for(cat in categ) {
+			data.push({category: cat, dirs: categ[cat]});
+		}
 		
-		return ret;
+		return Mustache.render(itemCategorizedListTemplate, data);
 	}
 	
 	var renderImages = function(images) {
@@ -348,7 +363,6 @@ function Gallery(wrapper, api) {
 			content += renderDirCategorized(dirs);
 		else
 			content += renderDirFlat(dirs);
-		content += itemListingBreakTemplate;
 		content += renderImages(self.images);
 		$listing.html(content);
 		
