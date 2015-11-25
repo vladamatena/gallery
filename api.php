@@ -316,7 +316,8 @@
 		if(isset($exif['ExposureTime'])) $info['exposure'] = $exif['ExposureTime'];
 		if(isset($exif['FNumber'])) $info['fnumber'] = $exif['FNumber'];
 		if(isset($exif['ISOSpeedRatings'])) $info['iso'] = $exif['ISOSpeedRatings'];
-		if(isset($exif['ImageDescription'])) $info['description'] = $exif['ImageDescription'];
+		if(isset($exif['ImageDescription']) && strlen($exif['ImageDescription'] > 0)) $info['description'] = $exif['ImageDescription'];
+		if(isset($exif['Artist'])) $info['artist'] = $exif['Artist'];
 		
 		header('Content-type: application/json');
 		echo(json_encode($info));
