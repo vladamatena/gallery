@@ -254,7 +254,7 @@
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	bottom: 0px;
+	bottom: 50px;
 	width: 25%;
 
 	text-align: left;
@@ -267,7 +267,7 @@
 	position: absolute;
 	right: 0px;
 	top: 0px;
-	bottom: 0px;
+	bottom: 50px;
 	width: 25%;
 	
 	text-align: right;
@@ -314,7 +314,7 @@
 .gallery .viewer .bottom-menu {
 	position: absolute;
 	min-height: 10%;
-	bottom: 0px;
+	bottom: 50px;
 	left: 0px;
 	right: 0px;
 	text-align: right;
