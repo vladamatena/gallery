@@ -10,6 +10,8 @@ function Gallery(wrapper, api) {
 	var $path = null;
 	var $listing = null;
 	var $viewer = null;
+	var $viewerWeb = null;
+	var $viewerFull = null;
 	var $login = null;
 	var $topbar = null;
 	
@@ -35,6 +37,8 @@ function Gallery(wrapper, api) {
 			</div>\
 			<div class="listing">Loading...</div>\
 			<div class="viewer" style="display:none;" data-zoom="1" data-pos-x="0" data-pos-y="0">\
+				<div class="web"></div>\
+				<div class="full"></div>\
 				<div class="prev">\
 					<div class="inner" style="display: none;">\
 						<span class="nav" title="previous image"><</span>\
@@ -125,6 +129,8 @@ function Gallery(wrapper, api) {
 		$listing = $gallery.find('.listing');
 		$path = $gallery.find('.path');
 		$viewer = $gallery.find('.viewer');
+		$viewerWeb = $viewer.find('.web');
+		$viewerFull = $viewer.find('.full');
 		$login = $gallery.find('.login');
 		$logout = $gallery.find('.action.logout');
 		$zip = $gallery.find('.action.zip');
@@ -502,11 +508,14 @@ function Gallery(wrapper, api) {
 		// Remove old content
 		$viewer.find('video').remove();
 		$viewer.find('img').remove();
-		$viewer.css("background-image", '');
-		
+		$viewerWeb.css("background-image", '');
+		$viewerFull.css("background-image", '');
+	
 		// Reset zoom
-		$viewer.css('background-size', 'contain');
-		$viewer.data("zoom", 1);
+		$viewerWeb.data("zoom", 1);
+		$viewerFull.data("zoom", 1);
+		$viewerWeb.css('background-size', 'contain');
+		$viewerFull.css('background-size', 'contain');
 		
 		// Reset shift
 		$viewer.css("background-position", "50% 50%");
@@ -543,8 +552,8 @@ function Gallery(wrapper, api) {
 		self.currentImage = index;
 		
 		// Set image and preloaders
-		$viewer.css("background-image", 'url(\'' + self.images[index].web + '\')');
-		$viewer.ready(function() {
+		$viewerWeb.css("background-image", 'url(\'' + self.images[index].web + '\')');
+		$viewerWeb.ready(function() {
 			if(self.currentImage == index) {
 				console.log("Web image loaded: " + self.images[index].name);
 				var next = new Image();
@@ -582,7 +591,7 @@ function Gallery(wrapper, api) {
 	 * Displays original image version in the viewer
 	 */
 	var displayOriginal = function() {
-		$viewer.css("background-image", 'url(\'' + self.images[self.currentImage].src + '\')');
+		$viewerFull.css("background-image", 'url(\'' + self.images[self.currentImage].src + '\')');
 	}
 	
 	// Initialize gallery

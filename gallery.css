@@ -192,6 +192,31 @@
 	text-shadow:0px 0px 5px black, 2px 0px 5px black, 2px 2px 5px black, 0px 2px 5px black, -2px 0px 5px black, 0px -2px 5px black, -2px -2px 5px black, 0px 0px 5px black, 4px 0px 5px black, 4px 4px 5px black, 0px 4px 5px black, -4px 0px 5px black, 0px -4px 5px black, -4px -4px 5px black;
 }
 
+.gallery .viewer .web {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: -10;
+}
+
+.gallery .viewer .full {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+
+
 @media print {
 	.gallery .viewer .nav {
 		display: none;
