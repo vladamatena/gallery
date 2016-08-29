@@ -12,6 +12,14 @@ function Gallery(wrapper, api) {
 	var $viewer = null;
 	var $viewerWeb = null;
 	var $viewerFull = null;
+	var $viewerButtons = {
+		exit: null,
+		next: null,
+		prev: null,
+		download: null,
+		original: null,
+		save: null
+	};
 	var $login = null;
 	var $topbar = null;
 	
@@ -58,8 +66,8 @@ function Gallery(wrapper, api) {
 				</div>\
 				<div class="bottom-menu">\
 					<div class="inner" style="display: none;">\
-						<div class="save button" title="download full resolution image">&#x21E9;</div>\
 						<div class="original button" title="full resolution">&#x2592;</div>\
+						<div class="save button" title="download full resolution image">&#x21E9;</div>\
 					</div>\
 				</div>\
 			</div>\
@@ -131,6 +139,12 @@ function Gallery(wrapper, api) {
 		$viewer = $gallery.find('.viewer');
 		$viewerWeb = $viewer.find('.web');
 		$viewerFull = $viewer.find('.full');
+		$viewerButtons.exit = $viewer.find('.exit')
+		$viewerButtons.next = $viewer.find('.next')
+		$viewerButtons.prev = $viewer.find('.prev')
+		$viewerButtons.download = $viewer.find('.download')
+		$viewerButtons.original = $viewer.find('.original')
+		$viewerButtons.save = $viewer.find('.save')
 		$login = $gallery.find('.login');
 		$logout = $gallery.find('.action.logout');
 		$zip = $gallery.find('.action.zip');
@@ -143,11 +157,11 @@ function Gallery(wrapper, api) {
 		);
 		
 		// Bind viewer actions
-		$('.exit', $viewer).click(closeViewer);
-		$('.prev', $viewer).click(prevImg);
-		$('.next', $viewer).click(nextImg);
-		$('.save', $viewer).click(downloadSourceImage);
-		$('.original', $viewer).click(displayOriginal);
+		$viewerButtons.exit.click(closeViewer);
+		$viewerButtons.prev.click(prevImg);
+		$viewerButtons.next.click(nextImg);
+		$viewerButtons.save.click(downloadSourceImage);
+		$viewerButtons.original.click(displayOriginal);
 		$('body').keydown(function(event) {
 			switch(event.which) {
 				case 27:
@@ -523,6 +537,9 @@ function Gallery(wrapper, api) {
 			x:0,
 			y:0
 		};
+
+		// Reset full quality switch
+		$viewerButtons.original.show();
 	}
 	
 	var display = function(index) {
@@ -592,6 +609,7 @@ function Gallery(wrapper, api) {
 	 */
 	var displayOriginal = function() {
 		$viewerFull.css("background-image", 'url(\'' + self.images[self.currentImage].src + '\')');
+		$viewerButtons.original.hide();
 	}
 	
 	// Initialize gallery
