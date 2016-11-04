@@ -291,11 +291,10 @@
 /*		if($size == "video")
 			header("Content-type: video/mp4");
 		else
-			header("Content-type: image/jpg");
-	*/
-	
-	
-	//	readfile($img);
+			header("Content-type: image/jpg"); */
+
+		header("Cache-Control: public");
+		header("Cache-Control: max-age=86400");
 	
 		sendFile($img);
 	}
@@ -320,6 +319,9 @@
 		if(isset($exif['Artist'])) $info['artist'] = $exif['Artist'];
 		
 		header('Content-type: application/json');
+		header("Cache-Control: public");
+		header("Cache-Control: max-age=3600");
+
 		echo(json_encode($info));
 	}
 	
