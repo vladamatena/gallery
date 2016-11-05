@@ -61,6 +61,7 @@ function Gallery(wrapper, api) {
 					<div class="inner" style="display: none;">\
 						<div class="info"></div>\
 						<div class="name"></div>\
+						<div class="link"><a href="http://seznam.cz"></a></div>\
 						<div class="exit button" title="exit">x</div>\
 					</div>\
 				</div>\
@@ -597,6 +598,9 @@ function Gallery(wrapper, api) {
 		
 		// Set image name
 		$('.name', $viewer).text(self.images[index].name);
+		$link = $('.link a', $viewer);
+		$link.text(location.href);
+		$link.attr('href', location.href);
 		
 		// Load image info
 		$('.info', $viewer).empty();

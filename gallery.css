@@ -317,6 +317,11 @@
 	text-align: left;
 }
 
+.gallery .viewer .top-menu .link > a {
+    font-size: 10px;
+    text-decoration: none;
+}
+
 .gallery .viewer .top-menu .exit {
 	position: absolute;
 	right: 0px;
