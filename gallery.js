@@ -271,7 +271,7 @@ function Gallery(wrapper, api) {
 		renderPath(path);
 		
 		// Store path in history
-		history.replaceState({value: 1, value2: "X"}, "title", "index.html?path=" + path);
+		updateURL(path, null);
 		
 		// Load listing
 		$.ajax({
@@ -281,6 +281,15 @@ function Gallery(wrapper, api) {
 			renderDir(items, path=='');
 		});
 	};
+	
+	var updateURL = function(path, image) {
+		console.log(path, image);
+		url = "?path=" + path;
+		if(image) {
+				url = url + "&image=" + image;
+		}
+		history.pushState({}, "title", url);
+	}
 	
 	var renderPath = function(path) {
 		// Get path parts
@@ -475,6 +484,9 @@ function Gallery(wrapper, api) {
 	}
 	
 	var closeViewer = function() {
+		// Update URL to remove image
+		updateURL(getCurrentPath(), null);
+		
 		// Hide viewer show listing
 		$listing.show();
 		$viewer.hide();
@@ -547,6 +559,8 @@ function Gallery(wrapper, api) {
 		self.currentImage = index;
 		
 		resetViewer();
+		
+		updateURL(getCurrentPath(), self.images[index].name);
 		
 		if(self.images[index].type == 'image')
 			displayImage(index);
