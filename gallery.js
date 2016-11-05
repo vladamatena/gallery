@@ -241,24 +241,25 @@ function Gallery(wrapper, api) {
 			url: api,
 			data: { fn: "session" }
 		}).done(function(result) {
-			if(result == "logged")
-				cd(getCurrentPath());
-			else
+			if(result == "logged") {
+				cd(null);
+			} else {
 				showLogin();
+			}
 		});
 	};
 	
-	var getCurrentPath = function() {
+	var decodeURL = function() {
 		var search = location.search.substring(1);
 		var obj = {'path': ''};
 		
 		if(search.length > 0)
 			obj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 		
-		if(typeof obj.path != 'undefined')
-			return obj.path;
-		else
-			return "";
+		if(typeof obj.path == 'undefined')
+			obj.path = "";
+		
+		return obj;
 	}
 	
 	var showLogin = function() {
@@ -266,28 +267,39 @@ function Gallery(wrapper, api) {
 	}
 	
 	/** Change directory */
-	cd = function(path) {
+	var cd = function(path) {
+		if(path != null) {
+			// Store path in history
+			updateURL(path, null);
+		} else {
+			path = decodeURL().path;
+		}
+		
 		// Set path
 		self.path = path;
 		renderPath(path);
-		
-		// Store path in history
-		updateURL(path, null);
 		
 		// Load listing
 		$.ajax({
 			url: api,
 			data: { fn: 'ls', folder: path }
 		}).done(function(items) {
+			// Open path
 			renderDir(items, path=='');
+			
+			// Open image if set and found
+			$(items).each(function(index) {
+				if(self.items[index].name == decodeURL().image) {
+					openViewer(index);
+				}
+			})
 		});
 	};
 	
 	var updateURL = function(path, image) {
-		console.log(path, image);
 		url = "?path=" + path;
 		if(image) {
-				url = url + "&image=" + image;
+			url = url + "&image=" + image;
 		}
 		history.pushState({}, "title", url);
 	}
@@ -486,7 +498,7 @@ function Gallery(wrapper, api) {
 	
 	var closeViewer = function() {
 		// Update URL to remove image
-		updateURL(getCurrentPath(), null);
+		updateURL(decodeURL().path, null);
 		
 		// Hide viewer show listing
 		$listing.show();
@@ -561,7 +573,7 @@ function Gallery(wrapper, api) {
 		
 		resetViewer();
 		
-		updateURL(getCurrentPath(), self.images[index].name);
+		updateURL(decodeURL().path, self.images[index].name);
 		
 		if(self.images[index].type == 'image')
 			displayImage(index);
