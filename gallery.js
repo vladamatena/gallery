@@ -7,7 +7,6 @@ function Gallery(wrapper, api) {
 	/// Gallery wrapping element
 	var $wrapper = $(wrapper);
 	var $gallery = null;
-	var $path = null;
 	var $listing = null;
 	var $viewer = null;
 	var $viewerWeb = null;
@@ -187,7 +186,7 @@ function Gallery(wrapper, api) {
 	//			closeViewer();
 		});
 		$zip.click(function() {
-			var zip = api + "?" + $.param({fn: "zip", folder: self.path});
+			var zip = api + "?" + $.param({fn: "zip", folder: decodeURL().path});
 			window.location.href = zip;
 		});
 		
@@ -242,16 +241,16 @@ function Gallery(wrapper, api) {
 			data: { fn: "session" }
 		}).done(function(result) {
 			if(result == "logged") {
-				cd(null);
+				cd('');
 			} else {
 				showLogin();
 			}
 		});
 	};
 	
-	var decodeURL = function() {
+	var readURL = function() {
 		var search = location.search.substring(1);
-		var obj = {'path': ''};
+		var obj = {path: '', image: null};
 		
 		if(search.length > 0)
 			obj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
@@ -259,7 +258,18 @@ function Gallery(wrapper, api) {
 		if(typeof obj.path == 'undefined')
 			obj.path = "";
 		
+		if(typeof obj.image == 'undefined')
+			obj.image = null;
+		
 		return obj;
+	}
+	
+	var writeURL = function(path, image) {
+		url = "?path=" + path;
+		if(image) {
+			url = url + "&image=" + image;
+		}
+		history.pushState({}, "title", url);
 	}
 	
 	var showLogin = function() {
@@ -268,41 +278,28 @@ function Gallery(wrapper, api) {
 	
 	/** Change directory */
 	var cd = function(path) {
-		if(path != null) {
-			// Store path in history
-			updateURL(path, null);
-		} else {
-			path = decodeURL().path;
-		}
+		writeURL(path, null);
+		url =  readURL();
 		
 		// Set path
-		self.path = path;
-		renderPath(path);
+		renderPath(url.path);
 		
 		// Load listing
 		$.ajax({
 			url: api,
-			data: { fn: 'ls', folder: path }
+			data: { fn: 'ls', folder: url.path }
 		}).done(function(items) {
 			// Open path
-			renderDir(items, path=='');
+			renderDir(items, url.path=='');
 			
 			// Open image if set and found
 			$(items).each(function(index) {
-				if(self.items[index].name == decodeURL().image) {
+				if(self.items[index].name == url.image) {
 					openViewer(index);
 				}
 			})
 		});
 	};
-	
-	var updateURL = function(path, image) {
-		url = "?path=" + path;
-		if(image) {
-			url = url + "&image=" + image;
-		}
-		history.pushState({}, "title", url);
-	}
 	
 	var renderPath = function(path) {
 		// Get path parts
@@ -377,10 +374,11 @@ function Gallery(wrapper, api) {
 		// Set current directory content
 		items = sortItems(items);
 		self.items = items;
+		path = readURL().path;
 		
 		// Add data to items
 		$(items).each(function() {
-			var img = encodeURIComponent(self.path + "/" + this.name)
+			var img = encodeURIComponent(path + "/" + this.name)
 			this.thumb = api + "?fn=thumb&img=" + img;
 			this.web = api + "?fn=web&img=" + img;
 			this.src = api + "?fn=img&img=" + img;
@@ -498,7 +496,7 @@ function Gallery(wrapper, api) {
 	
 	var closeViewer = function() {
 		// Update URL to remove image
-		updateURL(decodeURL().path, null);
+		writeURL(readURL().path, null);
 		
 		// Hide viewer show listing
 		$listing.show();
@@ -573,7 +571,7 @@ function Gallery(wrapper, api) {
 		
 		resetViewer();
 		
-		updateURL(decodeURL().path, self.images[index].name);
+		writeURL(readURL().path, self.images[index].name);
 		
 		if(self.images[index].type == 'image')
 			displayImage(index);
@@ -618,7 +616,7 @@ function Gallery(wrapper, api) {
 		$('.info', $viewer).empty();
 		$.ajax({
 			url: api,
-			data: { fn: 'info', img: self.path + "/" + self.images[index].name }
+			data: { fn: 'info', img: readURL().path + "/" + self.images[index].name }
 		}).done(function(info) {
 			var data = [];
 			for(key in info)
