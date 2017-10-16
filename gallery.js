@@ -249,26 +249,31 @@ function Gallery(wrapper, api) {
 	};
 	
 	var readURL = function() {
-		var search = location.search.substring(1);
-				
-		if(search.length > 0)
-			obj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+		var searchParams = new URLSearchParams(window.location.search);
 		
-		if(typeof obj.gallery_path == 'undefined')
-			obj.gallery_path = "";
+		p = searchParams.get("gallery_path")
+		if(p == null) {
+			p = "";
+		}
 		
-		if(typeof obj.gallery_image == 'undefined')
-			obj.gallery_image = null;
-		
-		return {path: obj.gallery_path, image: obj.gallery_image};
+		return {
+			path: p,
+			image: searchParams.get("gallery_image")
+		};
 	}
 	
 	var writeURL = function(path, image) {
-		url = "?gallery_path=" + path;
-		if(image) {
-			url = url + "&gallery_image=" + image;
+		var searchParams = new URLSearchParams(window.location.search);
+			
+		searchParams.set("gallery_path", path);
+			
+		if(image != null) {
+			searchParams.set("gallery_image", image);
+		} else {
+			searchParams.delete("gallery_image");
 		}
-		history.pushState({}, "title", url);
+		
+		history.pushState({}, "title", "?" + searchParams.toString());
 	}
 	
 	var showLogin = function() {
