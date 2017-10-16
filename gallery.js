@@ -241,7 +241,7 @@ function Gallery(wrapper, api) {
 			data: { fn: "session" }
 		}).done(function(result) {
 			if(result == "logged") {
-				cd('');
+				updateView();
 			} else {
 				showLogin();
 			}
@@ -278,6 +278,11 @@ function Gallery(wrapper, api) {
 	/** Change directory */
 	var cd = function(path) {
 		writeURL(path, null);
+		updateView()
+	}
+	
+	/** Update view */
+	var updateView = function() {
 		url =  readURL();
 		
 		// Set path
