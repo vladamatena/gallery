@@ -250,24 +250,23 @@ function Gallery(wrapper, api) {
 	
 	var readURL = function() {
 		var search = location.search.substring(1);
-		var obj = {path: '', image: null};
-		
+				
 		if(search.length > 0)
 			obj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 		
-		if(typeof obj.path == 'undefined')
-			obj.path = "";
+		if(typeof obj.gallery_path == 'undefined')
+			obj.gallery_path = "";
 		
-		if(typeof obj.image == 'undefined')
-			obj.image = null;
+		if(typeof obj.gallery_image == 'undefined')
+			obj.gallery_image = null;
 		
-		return obj;
+		return {path: obj.gallery_path, image: obj.gallery_image};
 	}
 	
 	var writeURL = function(path, image) {
-		url = "?path=" + path;
+		url = "?gallery_path=" + path;
 		if(image) {
-			url = url + "&image=" + image;
+			url = url + "&gallery_image=" + image;
 		}
 		history.pushState({}, "title", url);
 	}
