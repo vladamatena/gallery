@@ -38,7 +38,7 @@ function Gallery(wrapper, api) {
 			<div class="top-bar">\
 				<div class="path">Loading...</div>\
 				<div class="actions">\
-					<div class="break"><div class="action zip">ZIP directory</div></div>\
+					<div class="break"><div class="action downloadall">Download all</div></div>\
 					<div class="break"><div class="action logout">Logout</div></div>\
 				</div>\
 			</div>\
@@ -125,8 +125,7 @@ function Gallery(wrapper, api) {
 			<source src="{{url}}" consols="true" autoplay="true">\
 			Your browser does not support the video tag.\
 		</video>';
-		
-		
+	
 	/** Gallery initialization */
 	init = function() {
 		// Render gallery and viewer element
@@ -147,7 +146,7 @@ function Gallery(wrapper, api) {
 		$viewerButtons.save = $viewer.find('.save')
 		$login = $gallery.find('.login');
 		$logout = $gallery.find('.action.logout');
-		$zip = $gallery.find('.action.zip');
+		$downloadall = $gallery.find('.action.downloadall');
 		$topbar = $gallery.find('.top-bar');
 		
 		// Show viewer controls on hover
@@ -185,9 +184,20 @@ function Gallery(wrapper, api) {
 	//		if(!document.mozIsFullScreen)
 	//			closeViewer();
 		});
-		$zip.click(function() {
-			var zip = api + "?" + $.param({fn: "zip", folder: decodeURL().path});
-			window.location.href = zip;
+
+		// Download all images in a directory
+		$downloadall.click(function() {
+			self.items.forEach(function(item) {
+				if(item.type != "image" && item.type != "video")
+					return;
+
+				var a = $('<a />');
+				a.attr('href', item.src);
+				a.attr('download', item.name);
+				a.appendTo('body');
+				a[0].click();
+				a.remove();
+			});
 		});
 		
 		// Prevent unwanted actions
