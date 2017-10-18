@@ -19,12 +19,6 @@
 			else
 				ls("");
 			break;
-		case "zip":
-			if(isset($_GET['folder']))
-				zip($_GET['folder']);
-			else
-				echo "404 No such directory";
-			break;
 		case "thumb":
 			get("small", $_GET['img']);
 			break;
@@ -209,15 +203,6 @@
 	function ls($folder) {
 		header('Content-type: application/json');
 		echo(json_encode(listFolder($folder)));
-	}
-	
-	function zip($folder) {
-		GLOBAL $gallery;
-		header('Content-type: application/zip');
-		header("Content-Disposition: attachment; filename=" . urlencode($folder . ".zip"));
-		chdir($gallery['root']);
-		passthru("zip -0 -r - \"$folder\"");
-		exit();
 	}
 	
 	function api_makeSmall($image) {
