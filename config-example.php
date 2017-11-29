@@ -1,6 +1,12 @@
 <?php
 	GLOBAL $gallery;
 	$gallery = array();
+
+	// Specify, how the top folders are categorized
+	// Allowed values are: year, name
+	// year - categories based on year detected in folder name
+	// name - categories based on the top folder name (if it contains only subfolders, not files)
+	$gallery['categories'] = "name";
 	
 	// Directory with images to browse
 	$gallery['root'] = "/original_photos";
