@@ -49,6 +49,9 @@
 		case "logout":
 			logout();
 			break;
+		case "config":
+			config();
+			break;
 		default:
 			apiError("Bad command: $function");
 	}
@@ -163,7 +166,7 @@
 		return preg_match('/\.[mM][pP][4]$/', $name);
 	}
 	
-	function listFolder($folder) {
+	function listFolder($folder, $list_subdirs) {
 		GLOBAL $gallery;
 		
 		// Check for ".." in folder name
@@ -179,8 +182,12 @@
 					// Add new item
 					$item = array();
 					$item['name'] = $entry;
-					if(is_dir("$path/$entry"))
+					if(is_dir("$path/$entry")) {
 						$item['type'] = "directory";
+						if($list_subdirs){
+							$item['subdirs'] = listFolder($entry, false);
+						}
+					}
 					else if(isFileImage($entry))
 						$item['type'] = "image";
 					else if(isFileVideo($entry))
@@ -202,7 +209,7 @@
 	
 	function ls($folder) {
 		header('Content-type: application/json');
-		echo(json_encode(listFolder($folder)));
+		echo(json_encode(listFolder($folder, true)));
 	}
 	
 	function api_makeSmall($image) {
@@ -308,6 +315,13 @@
 		header("Cache-Control: max-age=3600");
 
 		echo(json_encode($info));
+	}
+	
+	function config() {
+		GLOBAL $gallery_client;
+		
+		header('Content-type: application/json');
+		echo(json_encode($gallery_client));
 	}
 	
 	function update() {

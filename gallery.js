@@ -4,6 +4,8 @@ function Gallery(wrapper, api) {
 	/// Gallery version
 	this.version = 0;
 	
+	var $configuration; // Client configuration
+	
 	/// Gallery wrapping element
 	var $wrapper = $(wrapper);
 	var $gallery = null;
@@ -357,30 +359,71 @@ function Gallery(wrapper, api) {
 		});
 	}
 	
+	var containsFiles = function(files) {
+		for(index in files) {
+			file = files[index];
+			if(file.type != "directory"){
+				return true;
+			}
+		};
+
+		return false;
+	}
+	
 	var renderDirFlat = function(dirs) {
 		dirs = sortItems(dirs);
 		return Mustache.render(itemDirectoryListTemplate, dirs);
 	}
 	
 	var renderDirCategorized = function(dirs) {
-		// Categorize items by year contained in name
-		dirs = sortItems(dirs);
-		var categ = {};
-		$(dirs).each(function() {
-			var test = this.name.match(/19[0-9][0-9]|2[0-9][0-9][0-9]/);
-			cat = "Other";
-			if(test)
-				cat = test[0];
-			if(typeof categ[cat] == "undefined")
-				categ[cat] = [];
-			categ[cat].push(this);
-		});
-		
+		switch($config.categories){
+			case "year":
+				// Categorize items by year contained in name
+				dirs = sortItems(dirs);
+				var categ = {};
+				$(dirs).each(function() {
+					var test = this.name.match(/19[0-9][0-9]|2[0-9][0-9][0-9]/);
+					cat = "Other";
+					if(test)
+						cat = test[0];
+					if(typeof categ[cat] == "undefined")
+						categ[cat] = [];
+					categ[cat].push(this);
+				});
+				break;
+			case "name":
+				// Categorize items by top folder
+				dirs = sortItems(dirs);
+				var categ = {};
+				for(index in dirs) {
+					var dir = dirs[index];
+					files = dir.subdirs;
+					cat = "Other";
+					if(!containsFiles(files)){
+						cat = dir.name;
+					}
+					if(typeof categ[cat] == "undefined"){
+						categ[cat] = [];
+					}
+					if(cat == "Other"){
+						categ[cat].push(dir);
+					}
+					else {
+						for(i in files){
+							file = files[i];
+							categ[cat].push(file);
+						}
+					}
+				}
+				break;
+			default:
+				console.log("Error: bad configuration parameter categories = " + $config.categories);
+		}
+
 		var data = [];
 		for(cat in categ) {
 			data.push({category: cat, dirs: categ[cat]});
 		}
-		
 		return Mustache.render(itemCategorizedListTemplate, data);
 	}
 	
@@ -659,6 +702,12 @@ function Gallery(wrapper, api) {
 		$viewerButtons.original.hide();
 	}
 	
-	// Initialize gallery
-	init();
+	// Load configuration and initialize gallery
+	$.ajax({
+		url: api,
+		data: { fn: 'config' },
+	}).done(function(cat) {
+		$config = cat;
+		init();
+	});
 }
