@@ -332,7 +332,7 @@
 		echo "Generating scaled images...</br>";
 		
 		function updateDir($path) {
-			$items = listFolder($path);
+			$items = listFolder($path, false);
 			
 			echo "Processing directory: $path</br>";
 			echo str_pad('',4096)."\n";
