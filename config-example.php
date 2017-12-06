@@ -1,5 +1,7 @@
 <?php
-	// Server configurations options
+	/*********************************
+	 * Server configurations options *
+	 ********************************/
 	GLOBAL $gallery;
 	$gallery = array();
 
@@ -18,7 +20,9 @@
 	$gallery['sql_pass'] = "password";
 	$gallery['sql_db'] = "gallery";
 	
-	// Client configuration options
+	/**********************************
+	*  Client configuration options   *
+	**********************************/
 	GLOBAL $gallery_client;
 	$gallery_client = array();
 	
