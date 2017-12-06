@@ -308,7 +308,11 @@ function Gallery(wrapper, api) {
 		// Load listing
 		$.ajax({
 			url: api,
-			data: { fn: 'ls', folder: url.path }
+			data: { 
+				fn: 'ls',
+				folder: url.path,
+				subdirs: $config.categories == "name"
+			}
 		}).done(function(items) {
 			// Open path
 			renderDir(items, url.path=='');

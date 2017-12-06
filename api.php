@@ -15,9 +15,9 @@
 	switch($function) {
 		case "ls":
 			if(isset($_GET['folder']))
-				ls($_GET['folder']);
+				ls($_GET['folder'], $_GET['subdirs'] == "true");
 			else
-				ls("");
+				ls("", $_GET['subdirs'] == "true");
 			break;
 		case "thumb":
 			get("small", $_GET['img']);
@@ -207,9 +207,9 @@
 		return $items;
 	}
 	
-	function ls($folder) {
+	function ls($folder, $subdirs) {
 		header('Content-type: application/json');
-		echo(json_encode(listFolder($folder, true)));
+		echo(json_encode(listFolder($folder, $subdirs)));
 	}
 	
 	function api_makeSmall($image) {
