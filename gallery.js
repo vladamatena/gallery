@@ -4,7 +4,7 @@ function Gallery(wrapper, api) {
 	/// Gallery version
 	this.version = 0;
 	
-	var $categories = "year"; // Default value: year to be detected in folder names
+	var $configuration; // Client configuration
 	
 	/// Gallery wrapping element
 	var $wrapper = $(wrapper);
@@ -130,14 +130,6 @@ function Gallery(wrapper, api) {
 	
 	/** Gallery initialization */
 	init = function() {
-		// Load categories method
-		$.ajax({
-			url: api,
-			data: { fn: 'categories' }
-		}).done(function(cat) {
-			$categories = cat;
-		});
-		
 		// Render gallery and viewer element
 		$wrapper.empty();
 		$gallery = $(gallerytemplate).appendTo($wrapper);
@@ -384,7 +376,7 @@ function Gallery(wrapper, api) {
 	}
 	
 	var renderDirCategorized = function(dirs) {
-		switch($categories){
+		switch($config.categories){
 			case "year":
 				// Categorize items by year contained in name
 				dirs = sortItems(dirs);
@@ -425,7 +417,7 @@ function Gallery(wrapper, api) {
 				}
 				break;
 			default:
-				console.log("Error: bad configuration parameter categories = " + $categories);
+				console.log("Error: bad configuration parameter categories = " + $config.categories);
 		}
 
 		var data = [];
@@ -710,6 +702,12 @@ function Gallery(wrapper, api) {
 		$viewerButtons.original.hide();
 	}
 	
-	// Initialize gallery
-	init();
+	// Load configuration and initialize gallery
+	$.ajax({
+		url: api,
+		data: { fn: 'config' },
+	}).done(function(cat) {
+		$config = cat;
+		init();
+	});
 }

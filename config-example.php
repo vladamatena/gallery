@@ -1,13 +1,8 @@
 <?php
+	// Server configurations options
 	GLOBAL $gallery;
 	$gallery = array();
 
-	// Specify, how the top folders are categorized
-	// Allowed values are: year, name
-	// year - categories based on year detected in folder name
-	// name - categories based on the top folder name (if it contains only subfolders, not files)
-	$gallery['categories'] = "name";
-	
 	// Directory with images to browse
 	$gallery['root'] = "/original_photos";
 	
@@ -22,4 +17,14 @@
 	$gallery['sql_user'] = "gallery";
 	$gallery['sql_pass'] = "password";
 	$gallery['sql_db'] = "gallery";
+	
+	// Client configuration options
+	GLOBAL $gallery_client;
+	$gallery_client = array();
+	
+	// Specify, how the top folders are categorized
+	// Allowed values are: year, name
+	// year - categories based on year detected in folder name
+	// name - categories based on the top folder name (if it contains only subfolders, not files)
+	$gallery_client['categories'] = "name";
 ?>

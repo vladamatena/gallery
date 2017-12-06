@@ -49,8 +49,8 @@
 		case "logout":
 			logout();
 			break;
-		case "categories":
-			echo $gallery["categories"];
+		case "config":
+			config();
 			break;
 		default:
 			apiError("Bad command: $function");
@@ -315,6 +315,13 @@
 		header("Cache-Control: max-age=3600");
 
 		echo(json_encode($info));
+	}
+	
+	function config() {
+		GLOBAL $gallery_client;
+		
+		header('Content-type: application/json');
+		echo(json_encode($gallery_client));
 	}
 	
 	function update() {
