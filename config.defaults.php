@@ -30,7 +30,7 @@
 	// Allowed values are: year, name
 	// year - categories based on year detected in folder name
 	// name - categories based on the top folder name (if it contains only subfolders, not files)
-	$gallery_client['categories'] = "name";
+	$gallery_client['categories'] = "year";
 	
 	// Speed limit for loading source images in bytes per second
 	// Load sources on faster connections
