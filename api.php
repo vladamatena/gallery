@@ -52,6 +52,9 @@
 		case "config":
 			config();
 			break;
+		case "speedtest":
+			speedtest($_GET['size']);
+			break;
 		default:
 			apiError("Bad command: $function");
 	}
@@ -322,6 +325,12 @@
 		
 		header('Content-type: application/json');
 		echo(json_encode($gallery_client));
+	}
+	
+	function speedtest($size) {
+		for($i = 0; $i < $size; $i++) {
+			echo(chr(mt_rand(0, 255)));
+		}
 	}
 	
 	function update() {

@@ -34,6 +34,8 @@ function Gallery(wrapper, api) {
 	var images = null;
 	/// Current open image index relative to images
 	var currentImage = null;
+	/// Connection speed (B/s)
+	var connection_speed = 0;
 	
 	var gallerytemplate = '\
 		<div class="gallery">\
@@ -257,6 +259,18 @@ function Gallery(wrapper, api) {
 			} else {
 				showLogin();
 			}
+		});
+		
+		// Benchmark connection
+		var start = new Date().getTime();
+		var size = 10240;
+		$.ajax({
+			url: api,
+			data: { fn: "speedtest", size: size }
+		}).done(function(result) {
+			var elapsed = new Date().getTime() - start;
+			connection_speed = size / elapsed * 1000;
+			console.log("Connection speed " + connection_speed + " B/s");
 		});
 	};
 	
@@ -672,6 +686,11 @@ function Gallery(wrapper, api) {
 			}
 		});
 		
+		// Show source automaticaly if connection is fast
+		if(connection_speed > $config.speed_limit) {
+			displayOriginal();
+		}
+		
 		// Set image name
 		$('.name', $viewer).text(self.images[index].name);
 		$link = $('.link a', $viewer);
@@ -702,6 +721,7 @@ function Gallery(wrapper, api) {
 	 * Displays original image version in the viewer
 	 */
 	var displayOriginal = function() {
+		console.log("Showing original: ", self.images[self.currentImage].name);
 		$viewerFull.css("background-image", 'url(\'' + self.images[self.currentImage].src + '\')');
 		$viewerButtons.original.hide();
 	}
