@@ -163,7 +163,11 @@
 	}
 	
 	function isFileImage($name) {
-		return preg_match('/\.[jJ][pP][eE]?[gG]$/', $name);
+		$is_jpg = preg_match('/\.[jJ][pP][eE]?[gG]$/', $name);
+		$is_gif = preg_match('/\.[gG][iI][fF]$/', $name);
+
+		return $is_jpg || $is_gif;
+#		return preg_match('/\.[jJ][pP][eE]?[gG]$/', $name);
 	}
 	
 	function isFileVideo($name) {
