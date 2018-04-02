@@ -373,7 +373,7 @@ function Gallery(wrapper, api) {
 	 */
 	var sortItems = function(items) {
 		return items.sort(function(a, b) {
-			return a.name.localeCompare(b.name);
+			return a.name.localeCompare(b.name, navigator.language, {numeric: true});
 		});
 	}
 	
