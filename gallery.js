@@ -373,7 +373,7 @@ function Gallery(wrapper, api) {
 	 */
 	var sortItems = function(items) {
 		return items.sort(function(a, b) {
-			return a.name.localeCompare(b.name);
+			return a.name.localeCompare(b.name, navigator.language, {numeric: true});
 		});
 	}
 	
@@ -415,7 +415,7 @@ function Gallery(wrapper, api) {
 				var categ = {};
 				for(index in dirs) {
 					var dir = dirs[index];
-					files = dir.subdirs;
+					files = sortItems(dir.subdirs);
 					cat = "Other";
 					if(!containsFiles(files)){
 						cat = dir.name;
