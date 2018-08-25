@@ -165,14 +165,17 @@
 	function isFileImage($name) {
 		$is_jpg = preg_match('/\.[jJ][pP][eE]?[gG]$/', $name);
 		$is_gif = preg_match('/\.[gG][iI][fF]$/', $name);
+		$is_png = preg_match('/\.[pP][nN][gG]$/', $name);
 
-		return $is_jpg || $is_gif;
+		return $is_jpg || $is_gif || $is_png;
 	}
 	
 	function isFileVideo($name) {
 		$is_mp4 = preg_match('/\.[mM][pP][4]$/', $name);
 		$is_mkv = preg_match('/\.[mM][kK][vV]$/', $name);
-		return $is_mp4 || $is_mkv;
+		$is_webm = preg_match('/\.[wW][eE][bB][mM]$/', $name);
+
+		return $is_mp4 || $is_mkv || $is_webm;
 	}
 	
 	function listFolder($folder, $list_subdirs) {
